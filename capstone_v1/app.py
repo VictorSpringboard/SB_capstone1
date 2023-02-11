@@ -80,9 +80,18 @@ def logout():
 ###############################  Recipe Routes  #########################################
 
 @app.route('/users/<username>/recipes/search', methods=['GET', 'POST'])
-def search_recipes(username):
+def search_recipes(query, username):
     
     user = User.query.get_or_404(username)
     form = SearchForm()
+    
+    headers = {
+        'api_key': API_KEY,
+        'query': query,
+    }
+    
+    baseURL =  
+     
+     
     
     return render_template('search.html', user=user, form=form)
