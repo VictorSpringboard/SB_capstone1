@@ -8,26 +8,26 @@
     <ul class="navbar-nav mr-auto">
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Issues
+          Recipes
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/users/{{session['username']}}/issues/add">Add Issue</a>
+          <a class="dropdown-item" href="/users/{{session['username']}}/recipes/search">Search Recipes</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/all_issues">View all current issues</a>
+          <a class="dropdown-item" href="/users/{{session['username']}}/favorites">Favorites</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="/users/{{session['username']}}/issues/archive">View issue archive</a>
+          <a class="dropdown-item" href="/users/{{session['username']}}/shopping_list/">Shopping List</a>
         </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Tests
+          Friends
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="/users/{{session['username']}}/tests/add">add test</a>
+          <a class="dropdown-item" href="/users/{{session['username']}}/friends">View Friends</a>
           <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/all_tests">View all current tests</a>
+            <a class="dropdown-item" href="/users/{{session['username']}}/friends/search">Find friends</a>
           <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/users/{{session['username']}}/tests/archive">View test archive</a>
+            <a class="dropdown-item" href="/users/{{session['username']}}/friends/messages">View messages</a>
           </li>
         </div>
       </li>

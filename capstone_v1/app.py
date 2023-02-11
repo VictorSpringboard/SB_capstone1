@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
@@ -50,6 +50,25 @@ def register():
         flash('SUCCESS! USER CREATED')
         return redirect('/')
     return render_template('register.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        user = User.authenticate_user(username, password)
+        if user:
+            flash(f'Welcome back {user.username}')
+            session['username'] = user.username
+            return redirect('/')
+        else:
+            form.username.errors = ['INVALID PASSORD!']
+            
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():

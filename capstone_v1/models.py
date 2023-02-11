@@ -3,6 +3,7 @@ from flask_bcrypt import Bcrypt
 import datetime
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 def connect_db(app):
     db.app = app
