@@ -2,9 +2,9 @@ from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import ModelForm, LoginForm, RegisterUserForm
+from forms import ModelForm, LoginForm, RegisterUserForm, SearchForm
 from models import db, connect_db, User
-
+from secrets import API_KEY
 
 app = Flask(__name__)
 
@@ -75,3 +75,14 @@ def logout():
     session.pop('username')
     flash('Goodbye')
     return redirect('/')
+
+
+###############################  Recipe Routes  #########################################
+
+@app.route('/users/<username>/recipes/search', methods=['GET', 'POST'])
+def search_recipes(username):
+    
+    user = User.query.get_or_404(username)
+    form = SearchForm()
+    
+    return render_template('search.html', user=user, form=form)
