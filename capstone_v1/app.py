@@ -1,10 +1,12 @@
-from flask import Flask, request, render_template, redirect, flash, session
+from flask import Flask, request, render_template, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 from forms import ModelForm, LoginForm, RegisterUserForm, SearchForm
 from models import db, connect_db, User
 from secrets import API_KEY
+import requests
+
 
 app = Flask(__name__)
 
@@ -79,19 +81,17 @@ def logout():
 
 ###############################  Recipe Routes  #########################################
 
-@app.route('/users/<username>/recipes/search', methods=['GET', 'POST'])
+@app.route('/users/<username>/recipes/search/<query>', methods=['GET', 'POST'])
 def search_recipes(query, username):
     
     user = User.query.get_or_404(username)
     form = SearchForm()
     
-    headers = {
-        'api_key': API_KEY,
-        'query': query,
-    }
     
-    baseURL =  
+    baseURL = f'https://www.themealdb.com/api/json/v2/{API_KEY}/search.php?s={query}' 
      
-     
+    resp = requests.get(baseURL)
+    resp_json = resp.json()
+    return jsonify(resp_json)
     
-    return render_template('search.html', user=user, form=form)
+    # return render_template('search.html', user=user, form=form, resp=resp)
