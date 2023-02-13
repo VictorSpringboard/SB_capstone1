@@ -10,7 +10,13 @@ import requests
 
 app = Flask(__name__)
 
+# home db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+
+# work db
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+
+# test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
 
 app.debug = False
