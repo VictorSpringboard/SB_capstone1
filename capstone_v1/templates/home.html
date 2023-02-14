@@ -10,11 +10,16 @@
     {% if session['username'] %}
         
     <div class="searchBox">
-        <form action="">
+        <form id="searchForm">
             <h2>Search form here</h2>
-            <input type="text">
+            <input id='searchBox' type="text">
             <button>Search!</button>
         </form>
+        <div class="showStuff">
+            <ul class="stuff">
+                
+            </ul>
+        </div>
     </div>
     {% endif %}
 
