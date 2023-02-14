@@ -7,5 +7,17 @@
     
     {% block body %}
 
+    {% if session['username'] %}
+        
+    <div class="searchBox">
+        <form action="">
+            <h2>Search form here</h2>
+            <input type="text">
+            <button>Search!</button>
+        </form>
+    </div>
+    {% endif %}
+
+
     {% endblock body %}
     
