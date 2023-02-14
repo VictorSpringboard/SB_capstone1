@@ -81,17 +81,15 @@ def logout():
 
 ###############################  Recipe Routes  #########################################
 
-@app.route('/users/<username>/recipes/search/<query>', methods=['GET', 'POST'])
-def search_recipes(query, username):
+@app.route('/users/<username>/recipes/search/', methods=['GET', 'POST'])
+def search_recipes(username):
     
     user = User.query.get_or_404(username)
     form = SearchForm()
     
     
-    baseURL = f'https://www.themealdb.com/api/json/v2/{API_KEY}/search.php?s={query}' 
+    baseURL = f'https://www.themealdb.com/api/json/v2/{API_KEY}/search.php?s=chicken' 
      
     resp = requests.get(baseURL)
     resp_json = resp.json()
     return jsonify(resp_json)
-    
-    # return render_template('search.html', user=user, form=form, resp=resp)
