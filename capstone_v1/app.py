@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -87,15 +87,3 @@ def logout():
 
 ###############################  Recipe Routes  #########################################
 
-@app.route('/users/<username>/recipes/search/', methods=['GET', 'POST'])
-def search_recipes(username):
-    
-    user = User.query.get_or_404(username)
-    form = SearchForm()
-    
-    
-    baseURL = f'https://www.themealdb.com/api/json/v2/{API_KEY}/search.php?s=chicken' 
-     
-    resp = requests.get(baseURL)
-    resp_json = resp.json()
-    return jsonify(resp_json)
