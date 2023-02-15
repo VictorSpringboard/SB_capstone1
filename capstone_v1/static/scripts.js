@@ -6,29 +6,33 @@ const $theList = $('.stuff')
 
 
 const mealIdList = []
+const mealList = []
 async function getSomeData(){
         const someData = await axios.get(`https://www.themealdb.com/api/json/v2/${API_KEY}/filter.php?`, {params:{i:QUERY.value}})
-        // console.log(someData.data)
-
-        for (let meal of someData.data.meals){
-            mealIdList.push(parseInt(meal.idMeal, 10))
-        }
-        // console.log(mealIdList)
-
-
-        const getMeal = () => {
-        for (let meal of mealIdList.slice(0,5)){
-            async function getMealInfo(){
-                const mealData = await axios.get(`www.themealdb.com/api/json/v1/${API_KEY}/lookup.php?`, {params: {i:meal}})
-                console.log(mealData)
+        .then(res => {
+            // console.log(res.data.meals)
+            for (let mealId of res.data.meals){
+                mealIdList.push(parseInt(mealId.idMeal, 10))
             }
-            getMealInfo()
+            console.log(mealIdList)
+        }).then(() => {
+            
+            for (let id of mealIdList){
+                const moreData = axios.get(`https://www.themealdb.com/api/json/v2/${API_KEY}/lookup.php?`, {params: {i:id}})
+                mealList.push(moreData)
             }
-            getMeal()
-        }
+            // console.log(mealList)
+            Promise.all(mealList)
+            .then(arr =>{
+                // console.log(arr[0].data.meals[0].strMeal)
+                for (let i = 0; i < mealList.length; i++){
+                    console.log(arr[i].data.meals[0].strMeal)
+                }
+            })
+
+        })
+
     }
-
-
 
 
 
@@ -52,6 +56,4 @@ const searchButton = document.querySelector('#searchForm').addEventListener('sub
     console.log('a')
     getSomeData()
     console.log('b')
-    // getMeal()
-    console.log('c')
 })
