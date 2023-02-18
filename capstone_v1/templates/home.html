@@ -9,26 +9,22 @@
 
     {% if session['username'] %}
         
-    <div class="searchBoxes">
-        <form class='nameSearchForm' action="">
-            <h2>Search by meal name</h2>
-            <input id="nameInputBox" type="text">
+    <div class="searchBox">
+        <form id="searchForm">
+            <h2>Search form here</h2>
+            <input id='searchBox' type="text">
             <button>Search!</button>
         </form>
-        <form class='randomSearchForm' action="">
-            <h2>See 10 random meals!</h2>
-            <button>click to see 10 random meals</button>
-        </form>
-        <form class='categorySearchForm' action="">
-            <h2>Search by category</h2>
-                <p>A dropdown menu goes here, with all the categories to choose from </p>
-            <button>Category search</button>
-        </form>
-        <form class='ingredientsSearchForm' action="">
-            <h2>Search ingredients (comma separated)</h2>
-            <input id='ingredientsInputBox'type="text">
-            <button>Ingredient search</button>
-        </form>
+
+        <div class="cardContainer">
+            
+        </div>
+
+        <div class="showStuff">
+            <ul class="stuff">
+                
+            </ul>
+        </div>
     </div>
     {% endif %}
 
