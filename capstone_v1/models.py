@@ -41,3 +41,15 @@ class User(db.Model):
         else:
             return False
         
+class Recipe(db.Model):
+    __tablename__ = 'recipes' 
+    
+    recipe_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.Text, nullable=False)
+    ingredients = db.Column(db.Text, nullable=False)
+    measurements = db.Column(db.Text, nullable=False)
+    instructions = db.Column(db.Text, nullable=False)
+    category = db.Column(db.Text, nullable=False)
+    area = db.Column(db.Text, nullable=False)
+    original = db.Column(db.Text, nullable=False)
+    

@@ -5,8 +5,11 @@
 {% endblock title %}
 
 {% block body %}
-<h3>Recipes</h3>
-<p>{{details}}</p>
+<h3>{{details['strMeal']}}</h3>
+<img src="{{details['strMealThumb']}}" alt="">
+<p>{{details['strInstructions']}}</p>
 
-<p>{{example_ingredients}}</p>
+
+
+<button action="/add_to_favorites" type="button" class="btn btn-primary">Add recipe to favorites!</button>
 {% endblock body %}

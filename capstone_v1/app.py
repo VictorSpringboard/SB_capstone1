@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, flash, session, jso
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import ModelForm, LoginForm, RegisterUserForm, SearchForm
+from forms import ModelForm, LoginForm, RegisterUserForm
 from models import db, connect_db, User
 from secrets import API_KEY
 import requests, json
@@ -93,7 +93,20 @@ def logout():
 @app.route('/recipe_details/<int:meal_id>', methods=['GET', 'POST'])
 def get_details(meal_id):
     res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={meal_id}')
-    example_dict = res.json()
-    example_ingredients = [ing[1] for ing in example_dict['meals'][0].items() if 'Ingredient' in ing[0] and ing[1]]
+    res_json = res.json()
+    res_dict = res_json['meals'][0]
+    res_ingredients = [ing[1] for ing in res_dict.items() if 'Ingredient' in ing[0] and ing[1]]
+    ingredient_measurements = [ing[1] for ing in res_dict.items() if 'Measure' in ing[0] and ing[1] is not ' ']
+    ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
 
-    return render_template('recipe_details.html', details=example_dict, example_ingredients=example_ingredients)
+    return render_template('recipe_details.html', details=res_dict, example_ingredients=res_ingredients)
+
+
+'''
+commit notes:
+Current functionality
+    1 - can multisearch by ingredients. Click on individual recipes to be taken to a recipe detail page. 
+    2 - started working on db models. First task is:
+                                            ability to add recipe to a favorites list
+
+'''
