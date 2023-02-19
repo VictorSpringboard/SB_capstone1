@@ -5,8 +5,7 @@ from datetime import datetime as dt
 from forms import ModelForm, LoginForm, RegisterUserForm, SearchForm
 from models import db, connect_db, User
 from secrets import API_KEY
-import requests
-
+import requests, json
 
 app = Flask(__name__)
 
@@ -87,3 +86,14 @@ def logout():
 
 ###############################  Recipe Routes  #########################################
 
+# @app.route('/get_a_recipe/', methods=['GET', 'POST'])
+# def get_some_recipes(qry):
+#     print(res)
+
+@app.route('/recipe_details/<int:meal_id>', methods=['GET', 'POST'])
+def get_details(meal_id):
+    res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={meal_id}')
+    example_dict = res.json()
+    example_ingredients = [ing[1] for ing in example_dict['meals'][0].items() if 'Ingredient' in ing[0] and ing[1]]
+
+    return render_template('recipe_details.html', details=example_dict, example_ingredients=example_ingredients)
