@@ -37,13 +37,20 @@
       
       
       
-      
-        <a class="nav-link" href="/logout">logout</a>
+        <form class='form-inline' action="/logout">
+          <button class="btn btn-outline-success">logout</button>
+
+        </form>
       <!-- <li class="nav-item">
         <a class="nav-link" href="/change_password">change password</a>
       </li> -->
       <span class="navbar-text">
-        currently logged in as {{session['username']}} 
+        currently logged in as <form action="/users/{{session['username']}}/profile">
+          <button class="btn btn-outline-success">{{session['username']}}</button>
+        </form>
+        
+        
+        <!-- <a style='color:seagreen' class="nav-link" href="/users/{{session['username']}}/profile">{{session['username']}}</a>  -->
       </span>
   </div>
 </nav>

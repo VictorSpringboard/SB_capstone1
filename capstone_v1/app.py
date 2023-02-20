@@ -84,6 +84,20 @@ def logout():
     return redirect('/')
 
 
+#####################################  User Routes  ###################################################
+@app.route('/users/<username>/profile', methods=['GET', 'POST'])
+def view_user_profile(username):
+    user = User.query.get_or_404(username)
+    print(user)
+    
+    return render_template('user_profile.html', user=user)
+
+
+
+
+
+
+
 ###############################  Recipe Routes  #########################################
 
 # @app.route('/get_a_recipe/', methods=['GET', 'POST'])
@@ -100,6 +114,13 @@ def get_details(meal_id):
     ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
 
     return render_template('recipe_details.html', details=res_dict, example_ingredients=res_ingredients)
+
+@app.route('/recipes/<int:recipe_id>/favorite', methods=['POST'])
+def add_to_favorites(recipe_id):
+    
+    favorites = Favorite.query.filter(Favorite.user_id == session['username'])
+    favorite_ids = [favorite.rec]
+
 
 
 '''
