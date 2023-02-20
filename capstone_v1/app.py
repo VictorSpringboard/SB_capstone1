@@ -1,12 +1,16 @@
-from flask import Flask, request, render_template, redirect, flash, session, jsonify
+from flask import g, Flask, request, render_template, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import ModelForm, LoginForm, RegisterUserForm, SearchForm
-from models import db, connect_db, User
+from forms import ModelForm, LoginForm, RegisterUserForm
+from models import db, connect_db, User, Favorite, Grocery
 from secrets import API_KEY
-import requests
+import requests, json
 
+
+
+
+CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__)
 
@@ -27,6 +31,24 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 app.app_context().push()
     
+@app.before_request
+def add_user_to_g():
+    
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+    else:
+        g.user = None
+
+def do_login(user):
+    session[CURR_USER_KEY] = user.id
+    
+
+def do_logout():
+    
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+
 
 
 @app.route('/')
@@ -70,8 +92,8 @@ def login():
         
         user = User.authenticate_user(username, password)
         if user:
+            do_login(user)
             flash(f'Welcome back {user.username}')
-            session['username'] = user.username
             return redirect('/')
         else:
             form.username.errors = ['INVALID PASSORD!']
@@ -80,10 +102,88 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('username')
+    
+    do_logout()
+    
     flash('Goodbye')
     return redirect('/')
 
 
+#####################################  User Routes  ###################################################
+@app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
+def view_user_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    print(user)
+    
+    return render_template('user_profile.html', user=user)
+
+
+
+
+
+
+
 ###############################  Recipe Routes  #########################################
 
+# @app.route('/get_a_recipe/', methods=['GET', 'POST'])
+# def get_some_recipes(qry):
+#     print(res)
+
+@app.route('/recipe_details/<int:meal_id>', methods=['GET', 'POST'])
+def get_details(meal_id):
+    res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={meal_id}')
+    res_json = res.json()
+    res_dict = res_json['meals'][0]
+    res_ingredients = [ing[1] for ing in res_dict.items() if 'Ingredient' in ing[0] and ing[1]]
+    ingredient_measurements = [ing[1] for ing in res_dict.items() if 'Measure' in ing[0] and ing[1] is not ' ']
+    ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
+
+    return render_template('recipe_details.html', details=res_dict, example_ingredients=res_ingredients)
+
+@app.route('/recipes/<int:recipe_id>/favorite', methods=['GET', 'POST'])
+def add_to_favorites(recipe_id):
+    
+    # if not g.user or g.user.id != user_id:
+    #     flash('not authorized')
+    #     return redirect('/')
+    
+    
+    
+    
+    favorites = Favorite.query.filter(Favorite.user_id == session['username'])
+    favorite_ids = [favorite.recipe_id for favorite in favorites]
+    
+    if recipe_id not in favorite_ids:
+        info = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={recipe_id}')
+        info_json = info.json()
+        
+        res_dict = res_json['meals'][0]
+        res_ingredients = [ing[1] for ing in res_dict.items() if 'Ingredient' in ing[0] and ing[1]]
+        ingredient_measurements = [ing[1] for ing in res_dict.items() if 'Measure' in ing[0] and ing[1] is not ' ']
+        ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
+
+        new_favorite = Favorite(user_id=g.user.id, recipe_id = recipe_id, 
+                                title='fart1',
+                                ingredients='fart2',
+                                measurements='fart3',
+                                instructions='fart4',
+                                category='fart5',
+                                area='fart6',
+                                original='fart7')
+        db.session.add(new_favorite)
+        
+        
+    db.session.commit()
+    
+    return redirect('/')
+        
+        
+        
+'''
+commit notes:
+Current functionality
+    1 - can multisearch by ingredients. Click on individual recipes to be taken to a recipe detail page. 
+    2 - started working on db models. First task is:
+                                            ability to add recipe to a favorites list
+
+'''

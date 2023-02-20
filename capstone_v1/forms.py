@@ -21,5 +21,3 @@ class RegisterUserForm(FlaskForm):
     password = PasswordField('Password')
     email = StringField('Email address') 
     
-class SearchForm(FlaskForm):
-    search_string = StringField('Search recipes!')
