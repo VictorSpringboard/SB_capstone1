@@ -113,9 +113,10 @@ def logout():
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
 def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
     print(user)
     
-    return render_template('user_profile.html', user=user)
+    return render_template('user_profile.html', user=user, favorites=favorites)
 
 
 
