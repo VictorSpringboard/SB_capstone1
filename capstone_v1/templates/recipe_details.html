@@ -10,6 +10,8 @@
 <p>{{details['strInstructions']}}</p>
 
 
+<form action="/recipes/{{details['idMeal']}}/favorite">
+    <button class="btn btn-primary">Add recipe to favorites!</button>
 
-<button action="/add_to_favorites" type="button" class="btn btn-primary">Add recipe to favorites!</button>
+</form>
 {% endblock body %}

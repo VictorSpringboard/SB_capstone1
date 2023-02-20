@@ -7,7 +7,7 @@
     
     {% block body %}
 
-    {% if session['username'] %}
+    {% if g.user %}
         
     <div class="searchBox">
         <form id="searchForm">

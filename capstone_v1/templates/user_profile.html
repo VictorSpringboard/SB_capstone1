@@ -7,9 +7,9 @@
     
     {% block body %}
 
-    {% if session['username'] %}
+    {% if g.user %}
         
-    <h2>This is the user profile page for {{session['username']}}</h2>
+    <h2>This is the user profile page for {{g.user}}</h2>
 
     <h4></h4>
 
