@@ -15,10 +15,10 @@ CURR_USER_KEY = 'curr_user'
 app = Flask(__name__)
 
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -154,8 +154,8 @@ def add_to_favorites(recipe_id):
     favorite_ids = [favorite.recipe_id for favorite in favorites]
     
     if recipe_id not in favorite_ids:
-        info = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={recipe_id}')
-        info_json = info.json()
+        res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={recipe_id}')
+        res_json = res.json()
         
         res_dict = res_json['meals'][0]
         res_ingredients = [ing[1] for ing in res_dict.items() if 'Ingredient' in ing[0] and ing[1]]
@@ -163,16 +163,16 @@ def add_to_favorites(recipe_id):
         ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
 
         new_favorite = Favorite(user_id=g.user.id, recipe_id = recipe_id, 
-                                title='fart1',
-                                ingredients='fart2',
-                                measurements='fart3',
-                                instructions='fart4',
-                                category='fart5',
-                                area='fart6',
-                                original='fart7')
+                                title=res_dict['strMeal'],
+                                ingredients=' '.join(res_ingredients),
+                                measurements=' '.join(ingredient_measurements),
+                                instructions=res_dict['strInstructions'],
+                                category=res_dict['strCategory'],
+                                area=res_dict['strArea'],
+                                original=res_dict['strSource'])
         db.session.add(new_favorite)
         
-        
+    flash('Successfully added recipe to favorites!')
     db.session.commit()
     
     return redirect('/')
