@@ -118,6 +118,13 @@ def view_user_profile(user_id):
     
     return render_template('user_profile.html', user=user, favorites=favorites)
 
+@app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
+def view_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+
+    return render_template('favorites.html', user=user, favorites=favorites)
+
 
 
 
@@ -151,7 +158,7 @@ def add_to_favorites(recipe_id):
     
     
     
-    favorites = Favorite.query.filter(Favorite.user_id == session['username'])
+    favorites = Favorite.query.filter(Favorite.user_id == g.user.id)
     favorite_ids = [favorite.recipe_id for favorite in favorites]
     
     if recipe_id not in favorite_ids:
@@ -160,13 +167,13 @@ def add_to_favorites(recipe_id):
         
         res_dict = res_json['meals'][0]
         res_ingredients = [ing[1] for ing in res_dict.items() if 'Ingredient' in ing[0] and ing[1]]
-        ingredient_measurements = [ing[1] for ing in res_dict.items() if 'Measure' in ing[0] and ing[1] is not ' ']
+        ingredient_measurements = [ing[1] for ing in res_dict.items() if 'Measure' in ing[0] and (ing[1] is not None and ing[1] is not ' ')]
         ingredients_and_measurements = dict(zip(res_ingredients, ingredient_measurements))
 
         new_favorite = Favorite(user_id=g.user.id, recipe_id = recipe_id, 
                                 title=res_dict['strMeal'],
-                                ingredients=' '.join(res_ingredients),
-                                measurements=' '.join(ingredient_measurements),
+                                ingredients=' '.join(ingredients_and_measurements.keys()),
+                                measurements=' '.join(ingredients_and_measurements.values()),
                                 instructions=res_dict['strInstructions'],
                                 category=res_dict['strCategory'],
                                 area=res_dict['strArea'],
