@@ -5,23 +5,24 @@
 {% endblock %}
 
 {% block body %}
-    <h1>This is where you will find matches</h1>
 
 
-    <h2>Here is a random user</h2>
+
+    <h2>Do you like this person?</h2>
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+        <img class="card-img-top" src="{{rando_user.img}}" alt="{{rando_user.img}}">
         <div class="card-body">
           <h5 class="card-title">{{rando_user.username}}</h5>
           <p class="card-text">{{rando_user.bio}}</p>
           <h3>My favorite foods</h3>
           <ol>
             {% for item in rando_user_favs %}
-                <li>{{item.title}}</li>
+                <li><a href="/recipe_details/{{item.recipe_id}}">{{item.title}}</a></li>
             {% endfor %}
           </ol>
-          <a href="#" class="btn btn-primary">Swipe Right!</a>
           <a href="#" class="btn btn-danger">Swipe Left!</a>
+          <a href="#" class="btn btn-success">Swipe Right!</a>
+          <a href="/users/{{g.user.id}}/find_matches" class="btn btn-warning">Show another user</a>
         </div>
       </div>
 {% endblock %}

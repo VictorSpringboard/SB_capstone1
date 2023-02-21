@@ -6,7 +6,7 @@ from forms import ModelForm, LoginForm, RegisterUserForm
 from models import db, connect_db, User, Favorite, Grocery
 from secrets import API_KEY
 import requests, json, random
-
+from sqlalchemy.exc import IntegrityError
 
 
 
@@ -140,6 +140,10 @@ def find_matches(user_id):
 
 
     return render_template('matches.html', rando_user=rando_user, rando_user_favs=rando_user_favs)
+
+@app.route('/users/<user_id>/find_matches', methods=['GET', 'POST'])
+def get_different_match(user_id):
+    return redirect(f'/users/{user_id}/find_matches')
 
 
 
