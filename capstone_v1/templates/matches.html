@@ -21,8 +21,8 @@
             {% endfor %}
           </ol>
           <a href="#" class="btn btn-danger">Swipe Left!</a>
-          <a href="#" class="btn btn-success">Swipe Right!</a>
-          <a href="/users/{{g.user.id}}/find_matches" class="btn btn-warning">Show another user</a>
+          <a href="/users/{{g.user.id}}/add_to_matches/{{rando_user.id}}" class="btn btn-success">Swipe Right!</a>
+          <a href="/users/{{g.user.id}}/another_match" class="btn btn-warning">Show another user</a>
         </div>
       </div>
 {% endblock %}

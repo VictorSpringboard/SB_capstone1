@@ -120,7 +120,7 @@ def view_user_profile(user_id):
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
-    user = User.query.get_or_404(user_id)
+    user = User.query.get_or_40b4(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
     return render_template('favorites.html', user=user, favorites=favorites)
@@ -141,10 +141,16 @@ def find_matches(user_id):
 
     return render_template('matches.html', rando_user=rando_user, rando_user_favs=rando_user_favs)
 
-@app.route('/users/<user_id>/find_matches', methods=['GET', 'POST'])
+@app.route('/users/<user_id>/another_match', methods=['GET', 'POST'])
 def get_different_match(user_id):
     return redirect(f'/users/{user_id}/find_matches')
 
+@app.route('/users/<user_id>/add_to_matches/<match_id>', methods=['GET', 'POST'])
+def add_to_matches(user_id, match_id):
+    user = User.query.get_or_404(user_id)
+    match = User.query.get_or_404(match_id)
+
+    return f'{user.username} likes {match.username}!!!!'
 
 
 
