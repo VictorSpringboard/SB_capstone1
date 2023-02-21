@@ -1,4 +1,4 @@
-from models import db, connect_db, User, Favorite, Grocery
+from models import db, connect_db, User, Favorite, Grocery, Match
 from app import app
 import datetime
 import requests

@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 from forms import ModelForm, LoginForm, RegisterUserForm
-from models import db, connect_db, User, Favorite, Grocery
+from models import db, connect_db, User, Favorite, Grocery, Match
 from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
@@ -113,10 +113,11 @@ def logout():
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
 def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
+    all_users = User.query.all()
     favorites = Favorite.query.filter_by(user_id=user_id).all()
-    print(user)
+    matches = Match.query.filter_by(user_id=user_id).all()
     
-    return render_template('user_profile.html', user=user, favorites=favorites)
+    return render_template('user_profile.html', user=user, favorites=favorites, matches=matches, all_users=all_users)
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
@@ -150,7 +151,14 @@ def add_to_matches(user_id, match_id):
     user = User.query.get_or_404(user_id)
     match = User.query.get_or_404(match_id)
 
-    return f'{user.username} likes {match.username}!!!!'
+    new = Match(user_id=user_id,
+                match_id=match_id)
+
+    db.session.add(new)
+    db.session.commit()
+
+    flash('You liked a user!')
+    return redirect('/')
 
 
 
