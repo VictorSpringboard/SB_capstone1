@@ -1,7 +1,8 @@
 from models import db, connect_db, User, Favorite, Grocery
 from app import app
 import datetime
-
+import requests
+from secrets import API_KEY
 
 connect_db(app)
 app.app_context().push()
@@ -16,31 +17,36 @@ users = [
         'id': 0,
         'username': 'test',
         'password': 'test',
-        'email': 'test@test.com'
+        'email': 'test@test.com',
+        'bio': 'I am a test user. I love to test things. Testing is fun'
     },
     {
         'id': 1,
         'username': 'HankHill',
         'password': 'propane',
-        'email': 'hank@strickland.com'
+        'email': 'hank@strickland.com',
+        'bio': 'I sell propane and propane accessories. I love mowing lawns and using WD-40'
     },
     {
         'id': 2,
         'username': 'PeggyHill',
         'password': 'boggle',
-        'email': 'peggy@boggle.com'
+        'email': 'peggy@boggle.com',
+        'bio': 'I am a substitute spanish teacher at Tom Landry Middle School. I love boggle and playing softball'
     },
     {
         'id': 3,
         'username': 'BobbyHill',
         'password': 'comedy',
-        'email': 'bobby@thatsmypurse.com'
+        'email': 'bobby@thatsmypurse.com',
+        'bio': 'I am an amateur comedian and I like to hang out with my friends Connie and Joseph'
     },
     {
         'id': 4,
         'username': 'Boomhauer',
         'password': 'dang',
-        'email': 'dangole@talkinbout.com'
+        'email': 'dangole@talkinbout.com',
+        'bio': "Dang ole, tawmbout. Dang ole...biography"
     },
 ]
 
@@ -48,7 +54,8 @@ for user in users:
     new = User.register_user(id=user['id'],
                 username=user['username'],
                 pwd=user['password'],
-                email=user['email'])
+                email=user['email'],
+                bio=user['bio'])
     db.session.add(new)
     db.session.commit()
 
@@ -112,15 +119,33 @@ recipes = [
 
 ]
 
-for recipe in recipes:
-    new = Favorite(user_id=recipe['user_id'], 
-                    recipe_id=recipe['recipe_id'], 
-                    title=recipe['title'],
-                    ingredients=recipe['ingredients'],
-                    measurements=recipe['measurements'],
-                    instructions=recipe['instructions'],
-                    category=recipe['category'],
-                    area=recipe['area'],
-                    original=recipe['original'])
-    db.session.add(new)
-    db.session.commit()
+def get_meal_data():
+    res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/randomselection.php')
+    res_json = res.json()
+
+    res_dict = res_json['meals']
+
+    return res_dict
+
+
+
+
+
+# sometimes this throws an error, just run it again until it works
+
+for i in range(4):
+    example = get_meal_data()
+    for recipe in example:
+        new = Favorite(user_id=i, 
+                        recipe_id=recipe['idMeal'], 
+                        title=recipe['strMeal'],
+                        ingredients='example of ingredients',
+                        measurements='example of measurements',
+                        instructions=recipe['strInstructions'],
+                        category=recipe['strCategory'],
+                        area=recipe['strArea'],
+                        original=recipe['strSource'],
+                        )
+        db.session.add(new)
+        db.session.commit()
+

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Find matches!</title>
+{% endblock %}
+
+{% block body %}
+    <h1>This is where you will find matches</h1>
+
+
+    <h2>Here is a random user</h2>
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src=".../100px180/" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">{{rando_user.username}}</h5>
+          <p class="card-text">{{rando_user.bio}}</p>
+          <h3>My favorite foods</h3>
+          <ol>
+            {% for item in rando_user_favs %}
+                <li>{{item.title}}</li>
+            {% endfor %}
+          </ol>
+          <a href="#" class="btn btn-primary">Swipe Right!</a>
+          <a href="#" class="btn btn-danger">Swipe Left!</a>
+        </div>
+      </div>
+{% endblock %}

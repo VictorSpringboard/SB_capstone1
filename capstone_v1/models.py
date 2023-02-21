@@ -41,6 +41,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(50), nullable=False)
+    bio = db.Column(db.Text)
     
     groceries = db.relationship('User', secondary='groceries', primaryjoin=(Grocery.user_id == id))
     
@@ -50,7 +51,7 @@ class User(db.Model):
         return f'User: {self.username}, email: {self.email}'
     
     @classmethod
-    def register_user(cls, id, username, pwd, email):
+    def register_user(cls, id, username, pwd, email, bio):
         
         hashed = bcrypt.generate_password_hash(pwd)
         
@@ -59,7 +60,8 @@ class User(db.Model):
         return cls(id=id,
                     username=username, 
                     password=hashed_utf8,
-                    email=email)
+                    email=email,
+                    bio=bio)
     
     @classmethod
     def authenticate_user(cls, username, pwd):
