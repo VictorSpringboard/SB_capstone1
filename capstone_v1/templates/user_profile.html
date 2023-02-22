@@ -22,10 +22,13 @@
         {% endfor %}
     </ol>
     
-    <h2>These are {{g.user.username}}'s matches. It's their username </h2>
-    {% for match in matches %}
-    <p>{{match.match_id}}</p>
+    <h2>These are {{g.user.username}}'s matches.</h2>
+    {% for match in g.user.matches %}
+    <p>{{match.username}}</p>
     {% endfor %}
+    <form action="">
+        <button>Edit Matches</button>
+    </form>
 
 
 

@@ -29,8 +29,8 @@ class Favorite(db.Model):
 class Match(db.Model):
     __tablename__ = 'matches'
 
-    user_id = db.Column(db.Integer, primary_key=True)
-    match_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
+    match_id = db.Column(db.Integer,db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
 
 class Grocery(db.Model):
@@ -54,6 +54,8 @@ class User(db.Model):
     groceries = db.relationship('User', secondary='groceries', primaryjoin=(Grocery.user_id == id))
     
     favorites = db.relationship('User', secondary='favorites', primaryjoin=(Favorite.user_id == id))
+
+    matches = db.relationship('User', secondary='matches', primaryjoin=(Match.user_id == id), secondaryjoin=(Match.match_id == id))
 
     def __repr__(self):
         return f'User: {self.username}, email: {self.email}'

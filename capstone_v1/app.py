@@ -121,7 +121,7 @@ def view_user_profile(user_id):
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
-    user = User.query.get_or_40b4(user_id)
+    user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
     return render_template('favorites.html', user=user, favorites=favorites)
@@ -151,14 +151,12 @@ def add_to_matches(user_id, match_id):
     user = User.query.get_or_404(user_id)
     match = User.query.get_or_404(match_id)
 
-    new = Match(user_id=user_id,
-                match_id=match_id)
+    g.user.matches.append(match)
 
-    db.session.add(new)
     db.session.commit()
 
     flash('You liked a user!')
-    return redirect('/')
+    return redirect(f'/users/{user_id}/profile')
 
 
 
