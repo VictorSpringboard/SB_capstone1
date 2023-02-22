@@ -10,8 +10,10 @@
     {% if g.user %}
         
     <h2>This is the user profile page for {{g.user.username}}</h2>
+    <img src="{{g.user.img}}" alt="" width="300">
     <p>Username: {{g.user.username}}</p>
     <p>Email: {{g.user.email}}</p>
+    <p>About: {{g.user.bio}}</p>
 
 
     <h2>These are {{g.user.username}}'s favorite recipes</h2>
