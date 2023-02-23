@@ -8,8 +8,9 @@ from sqlalchemy.exc import IntegrityError
 connect_db(app)
 app.app_context().push()
 
-db.drop_all()
-db.create_all()
+def drop_create():
+    db.drop_all()
+    db.create_all()
 
 
 
@@ -56,15 +57,17 @@ users = [
     },
 ]
 
-for user in users:
-    new = User.register_user(id=user['id'],
-                username=user['username'],
-                pwd=user['password'],
-                email=user['email'],
-                bio=user['bio'],
-                img=user['img'])
-    db.session.add(new)
-    db.session.commit()
+def set_users():
+
+    for user in users:
+        new = User.register_user(id=user['id'],
+                    username=user['username'],
+                    pwd=user['password'],
+                    email=user['email'],
+                    bio=user['bio'],
+                    img=user['img'])
+        db.session.add(new)
+        db.session.commit()
 
 
 
@@ -81,21 +84,51 @@ def get_meal_data():
 
 
 
-# sometimes this throws an error, just run it again until it works
-# breakpoint()
-for i in range(5):
-    example = get_meal_data()
-    for recipe in example:
-        new = Favorite(user_id=i, 
-                    recipe_id=recipe['idMeal'], 
-                    title=recipe['strMeal'],
-                    ingredients='example of ingredients',
-                    measurements='example of measurements',
-                    instructions=recipe['strInstructions'],
-                    category=recipe['strCategory'],
-                    area=recipe['strArea'],
-                    original='example',
-                    )
+
+def set_favs():
+    for i in range(5):
+        example = get_meal_data()
+        for recipe in example:
+            new = Favorite(user_id=i, 
+                        recipe_id=recipe['idMeal'], 
+                        title=recipe['strMeal'],
+                        ingredients='example of ingredients',
+                        measurements='example of measurements',
+                        instructions=recipe['strInstructions'],
+                        category=recipe['strCategory'],
+                        area=recipe['strArea'],
+                        original='example',
+                        )
+            db.session.add(new)
+            db.session.commit()
+
+matches = [
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (2, 3),
+    (3, 2),
+    (3, 1),
+    (4, 0),
+]
+
+def set_matches():
+    for user, match in matches:
+        new = Match(user_id=user, match_id=match)
         db.session.add(new)
         db.session.commit()
 
+def clear_matches():
+    for user, match in matches:
+        new = Match(user_id=0, match_id=0)
+        db.session.add(new)
+        db.session.commit()
+
+
+
+drop_create()
+
+set_users()
+set_favs()
+set_matches()
+# clear_matches()
