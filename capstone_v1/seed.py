@@ -16,7 +16,7 @@ def drop_create():
 
 users = [
     {
-        'id': 0,
+        'id': 151,
         'username': 'test',
         'password': 'test',
         'email': 'test@test.com',
@@ -24,7 +24,7 @@ users = [
         'img': 'https://thumbs.dreamstime.com/b/student-trying-to-cheat-test-male-class-34669006.jpg'
     },
     {
-        'id': 1,
+        'id': 152,
         'username': 'HankHill',
         'password': 'propane',
         'email': 'hank@strickland.com',
@@ -32,7 +32,7 @@ users = [
         'img': 'https://play-lh.googleusercontent.com/iQaRYz9z_TsVyyzjtpaJ73ms9RPiT4e_UB5DOndoPmxIQ10LU5jGubR1X7hVI1U-_wM'
     },
     {
-        'id': 2,
+        'id': 153,
         'username': 'PeggyHill',
         'password': 'boggle',
         'email': 'peggy@boggle.com',
@@ -40,7 +40,7 @@ users = [
         'img': 'https://static.tvtropes.org/pmwiki/pub/images/char_6989_4107.jpg'
     },
     {
-        'id': 3,
+        'id': 154,
         'username': 'BobbyHill',
         'password': 'comedy',
         'email': 'bobby@thatsmypurse.com',
@@ -48,7 +48,7 @@ users = [
         'img': 'https://imgix.ranker.com/list_img_v2/14514/2754514/original/bobby-hill-feminist-hero'
     },
     {
-        'id': 4,
+        'id':155,
         'username': 'Boomhauer',
         'password': 'dang',
         'email': 'dangole@talkinbout.com',
@@ -60,7 +60,8 @@ users = [
 def set_users():
 
     for user in users:
-        new = User.register_user(id=user['id'],
+        new = User.register_user(
+                    id=user['id'],
                     username=user['username'],
                     pwd=user['password'],
                     email=user['email'],
@@ -103,13 +104,17 @@ def set_favs():
             db.session.commit()
 
 matches = [
-    (1, 2),
-    (1, 3),
-    (1, 4),
-    (2, 3),
-    (3, 2),
-    (3, 1),
-    (4, 0),
+    (151, 152),
+    (151, 45),
+    (152, 154),
+    (152, 67),
+    (152, 33),
+    (153, 152),
+    (153, 56),
+    (154, 153),
+    (154, 1),
+    (155, 154),
+    (155, 30)
 ]
 
 def set_matches():
@@ -129,6 +134,6 @@ def clear_matches():
 # drop_create()
 
 # set_users()
-set_favs()
-# set_matches()
+# set_favs()
+set_matches()
 # clear_matches()
