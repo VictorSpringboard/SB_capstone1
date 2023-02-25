@@ -87,7 +87,7 @@ def get_meal_data():
 
 
 def set_favs():
-    for i in range(1001, 2001):
+    for i in range(1, 156):
         example = get_meal_data()
         for recipe in example:
             new = Favorite(user_id=i, 
