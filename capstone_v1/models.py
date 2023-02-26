@@ -33,12 +33,7 @@ class Match(db.Model):
     match_id = db.Column(db.Integer,db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
 
-class Grocery(db.Model):
-    __tablename__ = 'groceries'
-    
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
-    ingredient_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Text, nullable=False)
+
 
     
 class User(db.Model):
@@ -51,7 +46,6 @@ class User(db.Model):
     bio = db.Column(db.Text)
     img = db.Column(db.Text)
     
-    groceries = db.relationship('User', secondary='groceries', primaryjoin=(Grocery.user_id == id))
     
     favorites = db.relationship('User', secondary='favorites', primaryjoin=(Favorite.user_id == id))
 
@@ -87,15 +81,3 @@ class User(db.Model):
     
     
         
-class Recipe(db.Model):
-    __tablename__ = 'recipes' 
-    
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.Text, nullable=False)
-    ingredients = db.Column(db.Text, nullable=False)
-    measurements = db.Column(db.Text, nullable=False)
-    instructions = db.Column(db.Text, nullable=False)
-    category = db.Column(db.Text, nullable=False)
-    area = db.Column(db.Text, nullable=False)
-    original = db.Column(db.Text, nullable=False)
-    

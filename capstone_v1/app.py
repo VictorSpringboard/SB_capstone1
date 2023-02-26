@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 from forms import ModelForm, LoginForm, RegisterUserForm
-from models import db, connect_db, User, Favorite, Grocery, Match
+from models import db, connect_db, User, Favorite, Match
 from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
@@ -113,11 +113,11 @@ def logout():
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
 def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
-    all_users = User.query.all()
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     matches = Match.query.filter_by(user_id=user_id).all()
+    breakpoint()
     
-    return render_template('user_profile.html', user=user, favorites=favorites, matches=matches, all_users=all_users)
+    return render_template('user_profile.html', user=user, favorites=favorites, matches=matches)
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
