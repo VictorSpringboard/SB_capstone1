@@ -57,3 +57,23 @@ const searchButton = document.querySelector('#searchForm').addEventListener('sub
     getSomeData()
 
 })
+
+
+// This code handles the re-ordering of the favorites list
+
+$(function() {
+    $('#fav_list').sortable({
+        update: function(event, ui) {
+            getIdsOfFavs();
+        }
+    })
+})
+
+function getIdsOfFavs() {
+    const values = []
+    $('.favorite_card').each(function(index) {
+        values.push($(this).attr('id').replace('fav', ''))
+    })
+    $('')
+}
+    

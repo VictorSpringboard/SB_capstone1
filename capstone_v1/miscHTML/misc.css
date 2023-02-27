@@ -1,0 +1,28 @@
+section {
+    width: 1000px;
+    height: 360px;
+    margin: 100px auto;
+    display: flex;
+    justify-content: space-around;
+}
+
+h1{
+    text-align: center;
+}
+
+div{
+    width: 200px;
+    height: 90%;
+    padding: 20px;
+    margin: 10px;
+    background: #fafafa;
+    box-sizing: border-box;
+
+}
+
+p{
+    background: red;
+    padding: 5px;
+    color:white;
+}
+
