@@ -6,8 +6,16 @@
     {% endblock %}
     
     {% block body %}
+
+
+
+
     {% if g.user.id == user.id%}
-    <h2>This is your profile</h2>
+
+
+
+
+
     <img src="{{user.img}}" alt="" width="300">
     <p>Username: {{user.username}}</p>
     <p>Email: {{user.email}}</p>
@@ -25,18 +33,44 @@
     
     <h2>These are your matches.</h2>
     {% for match in user.matches %}
-    <p><a href="/users/{{match.id}}/profile">{{match.username}}, id is {{match.id}}, matches are {{match.matches}}</a></p>
+    {% for match_match in match_matches %}
+
+
+    {% if g.user in match.matches %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="{{match.img}}" alt="Card image cap">
+            <div class="card-body">
+              <h5 class="card-title"><a href="/users/{{match.id}}/profile">{{match.username}}</a></h5>
+              <p class="card-text">Bio: {{match.bio}}</p>
+              <a href="#" class="btn btn-primary">Send a message!</a>
+            </div>
+          </div>
+
+        {% else %}
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src=".../100px180/" alt="Sorry. This user hasn't added you as a match yet, so you can't see their profile picture.">
+            <div class="card-body">
+              <h5 class="card-title"><a href="/users/{{match.id}}/profile">{{match.username}}</a></h5>
+              <p class="card-text">Bio: {{match.bio}}</p>
+              <p>Sorry. Only users who like each other can send messages and see each other's profile pictures</p>
+            </div>
+          </div>
     {% endif %}
-    <form action="">
-        <button>Edit Matches</button>
-    </form>
+
+
+
+
+
+
+    {% endfor %}
+    {% endfor %}
 
 
 
     {% else %}
-    <h1>THIS IS NOT YOUR PROFILE</h1>
         
     <h2>This is the user profile page for {{user.username}}</h2>
+   
     <p>You must like each other in order to see this user's picture!</p>
     <!-- <img src="{{user.img}}" alt="" width="300"> -->
     <p>Username: {{user.username}}</p>

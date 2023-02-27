@@ -32,7 +32,8 @@ class Match(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
     match_id = db.Column(db.Integer,db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
-
+    def __repr__(self):
+        return f'The user id {self.user_id} likes {self.match_id}'
 
 
     

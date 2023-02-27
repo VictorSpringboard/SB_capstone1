@@ -15,10 +15,10 @@ CURR_USER_KEY = 'curr_user'
 app = Flask(__name__)
 
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -114,10 +114,9 @@ def logout():
 def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
-    matches = Match.query.filter_by(user_id=user_id).all()
-    breakpoint()
-    
-    return render_template('user_profile.html', user=user, favorites=favorites, matches=matches)
+    user_matches = Match.query.filter_by(user_id=user_id).all()
+    match_matches = Match.query.filter_by(match_id=user_id).all()
+    return render_template('user_profile.html', user=user, favorites=favorites, matches=user_matches, match_matches=match_matches)
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
