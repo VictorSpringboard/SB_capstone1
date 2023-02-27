@@ -86,6 +86,9 @@
         {% endfor %}
     </ol>
     
+    <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
+        <button>Add this user to my matches!</button>
+    </form>
     
     {% endif %}
     
