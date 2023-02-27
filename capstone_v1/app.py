@@ -116,7 +116,19 @@ def view_user_profile(user_id):
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     user_matches = Match.query.filter_by(user_id=user_id).all()
     match_matches = Match.query.filter_by(match_id=user_id).all()
-    return render_template('user_profile.html', user=user, favorites=favorites, matches=user_matches, match_matches=match_matches)
+    
+    my_matches = [match.id for match in g.user.matches]
+    their_matches = [match.id for match in user.matches]
+    
+    
+    return render_template('user_profile.html', 
+                           user=user, 
+                           favorites=favorites, 
+                           matches=user_matches, 
+                           match_matches=match_matches,
+                           my_matches=my_matches,
+                           their_matches=their_matches)
+    
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
@@ -137,9 +149,12 @@ def find_matches(user_id):
     all_users = User.query.all()
     rando_user = random.choice(all_users)
     rando_user_favs = Favorite.query.filter_by(user_id=rando_user.id)
+    
+    my_matches = [match.id for match in g.user.matches]
+    their_matches = [match.id for match in user.matches]
 
 
-    return render_template('matches.html', rando_user=rando_user, rando_user_favs=rando_user_favs)
+    return render_template('matches.html', rando_user=rando_user, rando_user_favs=rando_user_favs,my_matches=my_matches, their_matches=their_matches)
 
 @app.route('/users/<user_id>/another_match', methods=['GET', 'POST'])
 def get_different_match(user_id):

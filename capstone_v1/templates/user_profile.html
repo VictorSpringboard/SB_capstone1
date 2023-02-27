@@ -13,16 +13,17 @@
     {% if g.user.id == user.id%}
 
 
-
-
-
     <img src="{{user.img}}" alt="" width="300">
     <p>Username: {{user.username}}</p>
     <p>Email: {{user.email}}</p>
     <p>About: {{user.bio}}</p>
     
+
+
+
+
     
-    <h2>These are your favorite recipes</h2>
+    <h2>Your favorite recipes</h2>
     
     <ol>
         {% for fav in favorites %}
@@ -33,11 +34,10 @@
     
     <h2>These are your matches.</h2>
     {% for match in user.matches %}
-    {% for match_match in match_matches %}
-
-
+    
+    
     {% if g.user in match.matches %}
-        <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 18rem;">
             <img class="card-img-top" src="{{match.img}}" alt="Card image cap">
             <div class="card-body">
               <h5 class="card-title"><a href="/users/{{match.id}}/profile">{{match.username}}</a></h5>
@@ -45,9 +45,9 @@
               <a href="#" class="btn btn-primary">Send a message!</a>
             </div>
           </div>
-
-        {% else %}
-        <div class="card" style="width: 18rem;">
+          
+          {% else %}
+          <div class="card" style="width: 18rem;">
             <img class="card-img-top" src=".../100px180/" alt="Sorry. This user hasn't added you as a match yet, so you can't see their profile picture.">
             <div class="card-body">
               <h5 class="card-title"><a href="/users/{{match.id}}/profile">{{match.username}}</a></h5>
@@ -55,24 +55,29 @@
               <p>Sorry. Only users who like each other can send messages and see each other's profile pictures</p>
             </div>
           </div>
+          
+          
+          
+          
+          
+          
+          {% endif %}
+          {% endfor %}
+    
+    
+    
+    {% else %}
+    
+
+    {% if g.user.id in their_matches %}
+          <img src="{{user.img}}" alt="" width="300">
+    {% else %}
+          <p>Sorry. You are not in this user's matches</p>
+          <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
+              <button>Add this user to my matches!</button>
+          </form>
     {% endif %}
 
-
-
-
-
-
-    {% endfor %}
-    {% endfor %}
-
-
-
-    {% else %}
-        
-    <h2>This is the user profile page for {{user.username}}</h2>
-   
-    <p>You must like each other in order to see this user's picture!</p>
-    <!-- <img src="{{user.img}}" alt="" width="300"> -->
     <p>Username: {{user.username}}</p>
     <p>Email: {{user.email}}</p>
     <p>About: {{user.bio}}</p>
@@ -86,9 +91,6 @@
         {% endfor %}
     </ol>
     
-    <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
-        <button>Add this user to my matches!</button>
-    </form>
     
     {% endif %}
     
