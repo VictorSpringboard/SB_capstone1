@@ -44,11 +44,7 @@ function dragLeave(e){
     this.style.border = 'none'
 }
 
-
-
-
     
-
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
 
