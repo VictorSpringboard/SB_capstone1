@@ -1,4 +1,4 @@
-from models import db, connect_db, User, Favorite, Grocery, Match
+from models import db, connect_db, User, Favorite, Match
 from app import app
 import datetime
 import requests
@@ -125,7 +125,7 @@ def set_matches():
 
 def clear_matches():
     for user, match in matches:
-        new = Match(user_id=0, match_id=0)
+        new = Match(user_id='', match_id='')
         db.session.add(new)
         db.session.commit()
 

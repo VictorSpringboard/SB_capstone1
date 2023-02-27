@@ -1,28 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}
-    <title>{{g.user.username}}'s Favorite Recipes!
-    </title>
-{% endblock %}
-
 {% block body %}
-
-{% if g.user %}
-<h2>These are {{g.user.username}}'s favorite recipes</h2>
-
-<ol>
-
-        {% for fav in favorites %}
-        <div id="fav_{{loop.index}}" class="favorite_card">
-            <li><a href="/recipe_details/{{fav.recipe_id}}">{{fav.title}}</a></li>
-        </div>
-            {% endfor %}
-    </div>
-</ol>    
-
-
-
-
-{% endif %}
     
+<section>
+    <div class="choice">
+        {% for fav in favorites %}
+        <p draggable="true" style="background-color:steelblue">{{fav.title}}</p>
+        {% endfor %}
+    </div>
+    <div class="choice" id="firstChoice"></div>
+    <div class="choice" id="secondChoice"></div>
+    <div class="choice" id="thirdChoice"></div>
+</section>
+
+
 {% endblock %}

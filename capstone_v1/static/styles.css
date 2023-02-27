@@ -1,22 +1,26 @@
-.searchBox{
-    background-color: lightsteelblue;
+section {
+    width: 1000px;
+    height: 360px;
+    margin: 100px auto;
+    display: flex;
+    justify-content: space-around;
 }
 
-#fav_list {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
+h1{
+    text-align: center;
 }
 
-#fav_list div{
-    margin: 0 4px 4px 4px;
-    padding: .4em;
-    display: inline-block;
+.choice{
+    width: 200px;
+    height: 90%;
+    padding: 20px;
+    margin: 10px;
+    background: darkgray;
+    box-sizing: border-box;
+
 }
 
-#outputDiv {
-    margin: 0 2px 2px 2px;
-    padding: .4em;
-    padding-left: 1.5em;
-    
+p{
+    padding: 5px;
+    color:white;
 }

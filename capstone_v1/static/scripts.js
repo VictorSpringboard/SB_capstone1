@@ -1,3 +1,54 @@
+// This code handles the re-ordering of the favorites list
+var p = document.getElementsByTagName('p')
+var choice = document.getElementsByClassName('choice')
+var dragItem = null;
+
+for (var i of p){
+    i.addEventListener('dragstart', dragStart)
+    i.addEventListener('dragend', dragEnd)
+}
+
+function dragStart(){
+    dragItem = this
+    setTimeout(() => this.style.display = 'none', 0)
+}
+
+
+function dragEnd(){
+    setTimeout(() => this.style.display = 'block', 0 )
+    dragItem = null;
+}
+
+for (var j of choice){
+    j.addEventListener('dragover', dragOver)
+    j.addEventListener('dragenter', dragEnter)
+    j.addEventListener('dragLeave', dragLeave)
+    j.addEventListener('drop', drop)
+}
+
+function drop(){
+    this.append(dragItem)
+}
+
+function dragOver(e){
+    e.preventDefault()
+    this.style.border = '2px dotted cyan'
+}
+
+function dragEnter(e){
+    e.preventDefault() 
+
+}
+
+function dragLeave(e){
+    this.style.border = 'none'
+}
+
+
+
+
+    
+
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
 
@@ -14,20 +65,20 @@ async function getSomeData(){
             // console.log(res.data.meals)
             for (let mealId of res.data.meals){
                 mealIds.push(parseInt(mealId.idMeal, 10))
-            }
+            }    
         }).then(() => {
             
             for (let id of mealIds){
                 const moreData = axios.get(`https://www.themealdb.com/api/json/v2/${API_KEY}/lookup.php?`, {params: {i:id}})
                 mealPromises.push(moreData)
-            }
-        })
+            }    
+        })    
             Promise.all(mealPromises)
             .then(arr =>{
                 // console.log(arr[0].data.meals[0].strMeal)
                 for (let i = 0; i < mealPromises.length; i++){
                     mealObjs.push(arr[i].data.meals[0])
-                }
+                }    
             }).then(()=>{  
                 for (let mealItem of mealObjs){
                     const item = document.createElement('div')
@@ -38,13 +89,13 @@ async function getSomeData(){
                                             <h5 class="card-title">${mealItem.strMeal}</h5>
                                             <p class="card-text">${mealItem.strInstructions}</p>
                                             <a href="/recipe_details/${mealItem.idMeal}" class="btn btn-primary">Go somewhere</a>
-                                        </div>
-                                </div>`)
-                }
+                                        </div>    
+                                </div>`)        
+                }                
 
-            })
+            })    
                 
-}
+}            
 
 
 
@@ -56,24 +107,6 @@ const searchButton = document.querySelector('#searchForm').addEventListener('sub
     e.preventDefault()
     getSomeData()
 
-})
+})    
 
 
-// This code handles the re-ordering of the favorites list
-
-$(function() {
-    $('#fav_list').sortable({
-        update: function(event, ui) {
-            getIdsOfFavs();
-        }
-    })
-})
-
-function getIdsOfFavs() {
-    const values = []
-    $('.favorite_card').each(function(index) {
-        values.push($(this).attr('id').replace('fav', ''))
-    })
-    $('')
-}
-    
