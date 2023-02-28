@@ -15,10 +15,10 @@ CURR_USER_KEY = 'curr_user'
 app = Flask(__name__)
 
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}

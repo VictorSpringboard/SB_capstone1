@@ -1,21 +1,13 @@
 const draggable_list = document.getElementById('draggable-list');
+const recipes = draggable_list.getElementsByTagName('li')
+const recipe_titles = []
 
-// for(let item of draggable_list){
-//   console.log(item)
-// }
-
-async function getFavorites() {
-    const theData = await axios.get('http://127.0.0.1:5000/users/152/get_favorites')
-    .then(
-        theData.data.all_favs.forEach((item) =>{
-            richestPeople.push(item)
-        })
-        )
-} 
-getFavorites()
+for (let recipe of recipes){
+    recipe_titles.push(recipe.innerText.slice(3, recipe.innerText.length))
+}
 
 
-const richestPeople = []
+const richestPeople = [...recipe_titles]
 
 // Store listitems
 const listItems = [];

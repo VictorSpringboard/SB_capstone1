@@ -6,7 +6,9 @@
 <p>Drag and drop</p>
 <ul class="draggable-list" id="draggable-list">
     {% for fav in favorites %}
-        
+        <li style="display:none">
+            {{fav.title}}
+        </li>
     {% endfor %}
 </ul>
 
