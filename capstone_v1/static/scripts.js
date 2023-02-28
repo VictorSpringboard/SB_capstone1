@@ -112,6 +112,9 @@ function addEventListeners() {
 
 check.addEventListener('click', checkOrder);
 
+console.log('Does This work?')
+
+
     
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
