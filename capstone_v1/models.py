@@ -25,6 +25,9 @@ class Favorite(db.Model):
     category = db.Column(db.Text, nullable=False)
     area = db.Column(db.Text, nullable=False)
     original = db.Column(db.Text, nullable=False)
+    
+    def getTitles(self):
+        return {'title': self.title}
 
 class Match(db.Model):
     __tablename__ = 'matches'

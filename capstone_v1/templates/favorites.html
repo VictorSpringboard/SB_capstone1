@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    
-<section>
-    <div class="choice">
-        {% for fav in favorites %}
-        <p draggable="true" style="background-color:steelblue">{{fav.title}}</p>
-        {% endfor %}
-    </div>
-    <div class="choice" id="firstChoice"></div>
-    <div class="choice" id="secondChoice"></div>
-    <div class="choice" id="thirdChoice"></div>
-</section>
-
+<ul class="draggable-list" id="draggable-list"></ul>
 
 {% endblock %}

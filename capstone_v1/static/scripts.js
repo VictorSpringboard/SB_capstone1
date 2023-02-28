@@ -1,50 +1,127 @@
-// This code handles the re-ordering of the favorites list
-var p = document.getElementsByTagName('p')
-var choice = document.getElementsByClassName('choice')
-var dragItem = null;
+const draggable_list = document.getElementById('draggable-list');
 
-for (var i of p){
-    i.addEventListener('dragstart', dragStart)
-    i.addEventListener('dragend', dragEnd)
+// for(let item of draggable_list){
+//   console.log(item)
+// }
+
+async function getFavorites() {
+    const theData = await axios.get('http://127.0.0.1:5000/users/152/get_favorites')
+    .then(
+        theData.data.all_favs.forEach((item) =>{
+            richestPeople.push(item)
+        })
+        )
+} 
+getFavorites()
+
+
+const richestPeople = []
+
+// Store listitems
+const listItems = [];
+
+let dragStartIndex;
+
+createList();
+
+// Insert list items into DOM
+function createList() {
+  [...richestPeople]
+    .map(a => ({ value: a, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(a => a.value)
+    .forEach((person, index) => {
+      const listItem = document.createElement('li');
+
+      listItem.setAttribute('data-index', index);
+
+      listItem.innerHTML = `
+        <span class="number">${index + 1}</span>
+        <div class="draggable" draggable="true">
+          <p class="person-name">${person}</p>
+          <i class="fas fa-grip-lines"></i>
+        </div>
+      `;
+
+      listItems.push(listItem);
+
+      
+
+      draggable_list.appendChild(listItem);
+    });
+
+  addEventListeners();
 }
 
-function dragStart(){
-    dragItem = this
-    setTimeout(() => this.style.display = 'none', 0)
+function dragStart() {
+  // console.log('Event: ', 'dragstart');
+  dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
-
-function dragEnd(){
-    setTimeout(() => this.style.display = 'block', 0 )
-    dragItem = null;
+function dragEnter() {
+  // console.log('Event: ', 'dragenter');
+  this.classList.add('over');
 }
 
-for (var j of choice){
-    j.addEventListener('dragover', dragOver)
-    j.addEventListener('dragenter', dragEnter)
-    j.addEventListener('dragLeave', dragLeave)
-    j.addEventListener('drop', drop)
+function dragLeave() {
+  // console.log('Event: ', 'dragleave');
+  this.classList.remove('over');
 }
 
-function drop(){
-    this.append(dragItem)
+function dragOver(e) {
+  // console.log('Event: ', 'dragover');
+  e.preventDefault();
 }
 
-function dragOver(e){
-    e.preventDefault()
-    this.style.border = '2px dotted cyan'
+function dragDrop() {
+  // console.log('Event: ', 'drop');
+  const dragEndIndex = +this.getAttribute('data-index');
+  swapItems(dragStartIndex, dragEndIndex);
+
+  this.classList.remove('over');
 }
 
-function dragEnter(e){
-    e.preventDefault() 
+// Swap list items that are drag and drop
+function swapItems(fromIndex, toIndex) {
+  const itemOne = listItems[fromIndex].querySelector('.draggable');
+  const itemTwo = listItems[toIndex].querySelector('.draggable');
 
+  listItems[fromIndex].appendChild(itemTwo);
+  listItems[toIndex].appendChild(itemOne);
 }
 
-function dragLeave(e){
-    this.style.border = 'none'
+// Check the order of list items
+function checkOrder() {
+  listItems.forEach((listItem, index) => {
+    const personName = listItem.querySelector('.draggable').innerText.trim();
+
+    if (personName !== richestPeople[index]) {
+      listItem.classList.add('wrong');
+    } else {
+      listItem.classList.remove('wrong');
+      listItem.classList.add('right');
+    }
+  });
 }
 
-    
+function addEventListeners() {
+  const draggables = document.querySelectorAll('.draggable');
+  const dragListItems = document.querySelectorAll('.draggable-list li');
+
+  draggables.forEach(draggable => {
+    draggable.addEventListener('dragstart', dragStart);
+  });
+
+  dragListItems.forEach(item => {
+    item.addEventListener('dragover', dragOver);
+    item.addEventListener('drop', dragDrop);
+    item.addEventListener('dragenter', dragEnter);
+    item.addEventListener('dragleave', dragLeave);
+  });
+}
+
+check.addEventListener('click', checkOrder);
+
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
 
