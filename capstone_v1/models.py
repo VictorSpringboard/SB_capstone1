@@ -38,6 +38,33 @@ class Match(db.Model):
     def __repr__(self):
         return f'The user id {self.user_id} likes {self.match_id}'
 
+class Message(db.Model):
+    __tablename__ = 'messages'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True,
+    )
+
+    text = db.Column(
+        db.String(140),
+        nullable=False,
+    )
+
+    timestamp = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.utcnow(),
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+
+    user = db.relationship('User')
+
 
     
 class User(db.Model):
