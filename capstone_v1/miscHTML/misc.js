@@ -5,13 +5,13 @@ const richestPeople = [
   'Jeff Bezos',
   'Bill Gates',
   'Warren Buffett',
-  'Bernard Arnault',
-  'Carlos Slim Helu',
-  'Amancio Ortega',
-  'Larry Ellison',
+  'Howard Schultz',
+  'Ken Langone',
+  'Sam Bankman Fried',
+  'Jeff Bezos',
   'Mark Zuckerberg',
   'Michael Bloomberg',
-  'Larry Page'
+  'Skip Bayless'
 ];
 
 // Store listitems

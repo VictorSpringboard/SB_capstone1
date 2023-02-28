@@ -2,16 +2,14 @@
 
 {% block body %}
     
-<section>
-    <div class="choice">
-        {% for fav in favorites %}
-        <p draggable="true" style="background-color:steelblue">{{fav.title}}</p>
-        {% endfor %}
-    </div>
-    <div class="choice" id="firstChoice"></div>
-    <div class="choice" id="secondChoice"></div>
-    <div class="choice" id="thirdChoice"></div>
-</section>
+<h1>{{user.username}}'s favorite recipes</h1>
+<p>Drag and drop</p>
+<ul class="draggable-list" id="draggable-list">
+    {% for fav in favorites %}
+        
+    {% endfor %}
+</ul>
+
 
 
 {% endblock %}
