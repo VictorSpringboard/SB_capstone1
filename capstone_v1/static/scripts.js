@@ -1,18 +1,21 @@
 const draggable_list = document.getElementById('draggable-list');
-const check = document.getElementById('check');
 
-const richestPeople = [
-  'Jeff Bezos',
-  'Bill Gates',
-  'Warren Buffett',
-  'Bernard Arnault',
-  'Carlos Slim Helu',
-  'Amancio Ortega',
-  'Larry Ellison',
-  'Mark Zuckerberg',
-  'Michael Bloomberg',
-  'Larry Page'
-];
+// for(let item of draggable_list){
+//   console.log(item)
+// }
+
+async function getFavorites() {
+    const theData = await axios.get('http://127.0.0.1:5000/users/152/get_favorites')
+    .then(
+        theData.data.all_favs.forEach((item) =>{
+            richestPeople.push(item)
+        })
+        )
+} 
+getFavorites()
+
+
+const richestPeople = []
 
 // Store listitems
 const listItems = [];
