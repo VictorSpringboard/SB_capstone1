@@ -54,7 +54,7 @@ class Message(db.Model):
     timestamp = db.Column(
         db.DateTime,
         nullable=False,
-        default=datetime.utcnow(),
+        default=datetime.datetime.utcnow(),
     )
 
     user_id = db.Column(

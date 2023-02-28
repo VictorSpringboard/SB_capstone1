@@ -1,9 +1,15 @@
+
+
+
+
+
+
 const draggable_list = document.getElementById('draggable-list');
 const recipes = draggable_list.getElementsByTagName('li')
 const recipe_titles = []
 
 for (let recipe of recipes){
-    recipe_titles.push(recipe.innerText.slice(3, recipe.innerText.length))
+  recipe_titles.push(recipe.innerText.slice(3, recipe.innerText.length))
 }
 
 
@@ -19,18 +25,18 @@ createList();
 // Insert list items into DOM
 function createList() {
   [...richestPeople]
-    .map(a => ({ value: a}))
-    .sort((a, b) => a.sort - b.sort)
-    .map(a => a.value)
-    .forEach((person, index) => {
-      const listItem = document.createElement('li');
+  .map(a => ({ value: a}))
+  .sort((a, b) => a.sort - b.sort)
+  .map(a => a.value)
+  .forEach((person, index) => {
+    const listItem = document.createElement('li');
 
       listItem.setAttribute('data-index', index);
 
       listItem.innerHTML = `
-        <span class="number">${index + 1}</span>
+      <span class="number">${index + 1}</span>
         <div class="draggable" draggable="true">
-          <p class="person-name">${person}</p>
+        <p class="person-name">${person}</p>
           <i class="fas fa-grip-lines"></i>
         </div>
       `;
@@ -42,6 +48,16 @@ function createList() {
 
   addEventListeners();
 }
+const numbers = document.querySelectorAll("[data-index]")
+for (let number of numbers){
+  if (number.getAttribute('data-index') < 3){
+    number.style.backgroundColor = '#FFFFE0';
+  }
+}
+
+
+
+
 
 function dragStart() {
   // console.log('Event: ', 'dragstart');
@@ -112,7 +128,6 @@ function addEventListeners() {
 
 check.addEventListener('click', checkOrder);
 
-console.log('Does This work?')
 
 
     
