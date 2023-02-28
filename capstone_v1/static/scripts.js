@@ -19,7 +19,7 @@ createList();
 // Insert list items into DOM
 function createList() {
   [...richestPeople]
-    .map(a => ({ value: a, sort: Math.random() }))
+    .map(a => ({ value: a}))
     .sort((a, b) => a.sort - b.sort)
     .map(a => a.value)
     .forEach((person, index) => {
