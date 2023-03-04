@@ -44,8 +44,8 @@ class Message(db.Model):
     __tablename__ = 'messages'
 
     id = db.Column(db.Integer, primary_key=True)
-    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default = datetime.datetime.utcnow)
 
@@ -66,10 +66,15 @@ class User(db.Model):
 
     matches = db.relationship('User', secondary='matches', primaryjoin=(Match.user_id == id), secondaryjoin=(Match.match_id == id))
     
-    sent_msgs = db.relationship('Message', foreign_keys = Message.sender_id, backref='author', lazy='dynamic')
-    received_msgs = db.relationship('Message', foreign_keys=Message.receiver.id, backref='receiver', lazy='dynamic')
+    sent_msgs = db.relationship('Message', foreign_keys=Message.sender_id, backref='author', lazy='dynamic')
+    received_msgs = db.relationship('Message', foreign_keys=Message.receiver_id, backref='recipient', lazy='dynamic')
     def __repr__(self):
         return f'User: {self.username}, email: {self.email}'
+    
+    def get_messages(self):
+        return Message.query.all()
+    
+    
     
     @classmethod
     def register_user(cls, id, username, pwd, email, bio, img):

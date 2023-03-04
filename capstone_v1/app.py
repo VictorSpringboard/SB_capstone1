@@ -3,8 +3,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import ModelForm, LoginForm, RegisterUserForm
-from models import db, connect_db, User, Favorite, Match
+from forms import LoginForm, RegisterUserForm, MessageForm
+from models import db, connect_db, User, Favorite, Match, Message
 from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
@@ -246,4 +246,11 @@ def add_to_favorites(recipe_id):
 #####################################   Message Routes   #############################################
 @app.route('/send_message/<recipient>', methods=['GET', 'POST'])
 def send_message(recipient):
-    pass
+    user = User.query.filter_by(username=recipient).first_or_404()
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=g.user, recipient=user, body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        return redirect(f'/users/{g.user.id}/profile')
+    return render_template('send_message.html', form=form, recipient=recipient)

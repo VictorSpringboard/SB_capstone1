@@ -134,6 +134,6 @@ def clear_matches():
 # drop_create()
 
 # set_users()
-set_favs()                                                    
+# set_favs()                                                    
 # set_matches()
 # clear_matches()

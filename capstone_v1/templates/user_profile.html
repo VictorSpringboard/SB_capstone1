@@ -30,6 +30,7 @@
         <li><a href="/recipe_details/{{fav.recipe_id}}">{{fav.title}}</a></li>
         {% endfor %}
     </ol>
+
     
     
     <h2>These are your matches.</h2>
@@ -42,7 +43,7 @@
             <div class="card-body">
               <h5 class="card-title"><a href="/users/{{match.id}}/profile">{{match.username}}</a></h5>
               <p class="card-text">Bio: {{match.bio}}</p>
-              <a href="#" class="btn btn-primary">Send a message!</a>
+              <a href="/send_message/{{match.username}}" class="btn btn-primary">Send a message!</a>
             </div>
           </div>
           
