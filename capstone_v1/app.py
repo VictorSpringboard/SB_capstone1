@@ -1,5 +1,6 @@
 from flask import g, Flask, request, render_template, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 from forms import ModelForm, LoginForm, RegisterUserForm
@@ -7,18 +8,19 @@ from models import db, connect_db, User, Favorite, Match
 from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
+from flask_bootstrap import Bootstrap
 
 
 
 CURR_USER_KEY = 'curr_user'
 
 app = Flask(__name__)
-
+bootstrap = Bootstrap()
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -29,7 +31,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
-app.app_context().push()
+app.app_context().push() 
     
 @app.before_request
 def add_user_to_g():
@@ -241,12 +243,7 @@ def add_to_favorites(recipe_id):
     return redirect('/')
         
         
-        
-'''
-commit notes:
-Current functionality
-    1 - can multisearch by ingredients. Click on individual recipes to be taken to a recipe detail page. 
-    2 - started working on db models. First task is:
-                                            ability to add recipe to a favorites list
-
-'''
+#####################################   Message Routes   #############################################
+@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+def send_message(recipient):
+    pass

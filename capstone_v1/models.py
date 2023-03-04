@@ -38,32 +38,16 @@ class Match(db.Model):
     def __repr__(self):
         return f'The user id {self.user_id} likes {self.match_id}'
 
+
+# Code adapted from a flask tutorial at blog.miguelgrinberg.com
 class Message(db.Model):
     __tablename__ = 'messages'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True,
-    )
-
-    text = db.Column(
-        db.String(140),
-        nullable=False,
-    )
-
-    timestamp = db.Column(
-        db.DateTime,
-        nullable=False,
-        default=datetime.datetime.utcnow(),
-    )
-
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('users.id', ondelete='CASCADE'),
-        nullable=False,
-    )
-
-    user = db.relationship('User')
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.datetime.utcnow)
 
 
     
@@ -81,7 +65,9 @@ class User(db.Model):
     favorites = db.relationship('User', secondary='favorites', primaryjoin=(Favorite.user_id == id))
 
     matches = db.relationship('User', secondary='matches', primaryjoin=(Match.user_id == id), secondaryjoin=(Match.match_id == id))
-
+    
+    sent_msgs = db.relationship('Message', foreign_keys = Message.sender_id, backref='author', lazy='dynamic')
+    received_msgs = db.relationship('Message', foreign_keys=Message.receiver.id, backref='receiver', lazy='dynamic')
     def __repr__(self):
         return f'User: {self.username}, email: {self.email}'
     
