@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
 from forms import LoginForm, RegisterUserForm, MessageForm
 from models import db, connect_db, User, Favorite, Match, Message
-from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
@@ -13,6 +12,7 @@ import os
 
 
 CURR_USER_KEY = 'curr_user'
+API_KEY = 9973533
 
 app = Flask(__name__)
 bootstrap = Bootstrap()
