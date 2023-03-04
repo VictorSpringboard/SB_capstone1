@@ -244,6 +244,12 @@ def add_to_favorites(recipe_id):
         
         
 #####################################   Message Routes   #############################################
+@app.route('/messages')
+def view_messages():
+    messages = g.user.received_msgs.all()
+    
+
+
 @app.route('/send_message/<recipient>', methods=['GET', 'POST'])
 def send_message(recipient):
     user = User.query.filter_by(username=recipient).first_or_404()
