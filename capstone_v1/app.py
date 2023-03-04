@@ -9,7 +9,7 @@ from secrets import API_KEY
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
-
+import os
 
 
 CURR_USER_KEY = 'curr_user'
@@ -17,7 +17,7 @@ CURR_USER_KEY = 'curr_user'
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
@@ -26,7 +26,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/y
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
 
 app.debug = False
-app.config['SECRET_KEY'] = 'secret'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'my_secret')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
