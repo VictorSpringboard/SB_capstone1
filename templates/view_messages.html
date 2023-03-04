@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    
+<h1>The Messages</h1>
+{% for message in messages %}
+
+    <p>{{message.body}}</p>
+{% endfor %}
+
+
+
+
+
+
+{% endblock %}

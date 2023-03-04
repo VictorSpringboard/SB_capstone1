@@ -244,11 +244,12 @@ def add_to_favorites(recipe_id):
         
         
 #####################################   Message Routes   #############################################
-@app.route('/messages')
-def view_messages():
+@app.route('/users/<int:user_id>/messages')
+def view_messages(user_id):
+    user_id = g.user.id
     messages = g.user.received_msgs.all()
     
-
+    return render_template('view_messages.html', messages=messages)
 
 @app.route('/send_message/<recipient>', methods=['GET', 'POST'])
 def send_message(recipient):
