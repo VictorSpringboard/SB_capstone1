@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+<<<<<<< HEAD
 {% block title %}
     <title>{{g.user.username}}'s Favorite Recipes!
     </title>
@@ -20,4 +21,20 @@
 
 {% endif %}
     
+=======
+{% block body %}
+    
+<h1>{{user.username}}'s favorite recipes</h1>
+<p>Drag and drop</p>
+<ul class="draggable-list" id="draggable-list">
+    {% for fav in favorites %}
+        <li style="display:none">
+            {{fav.title}}
+        </li>
+    {% endfor %}
+</ul>
+
+
+
+>>>>>>> messages
 {% endblock %}

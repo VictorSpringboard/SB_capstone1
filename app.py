@@ -1,35 +1,45 @@
 from flask import g, Flask, request, render_template, redirect, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import ModelForm, LoginForm, RegisterUserForm
-from models import db, connect_db, User, Favorite, Grocery
-from secrets import API_KEY
-import requests, json
+from forms import LoginForm, RegisterUserForm, MessageForm
+from models import db, connect_db, User, Favorite, Match, Message
+import requests, json, random
+from sqlalchemy.exc import IntegrityError
+from flask_bootstrap import Bootstrap
+import os
+
+'''
+march 4 commit notes:
+finally deployed to heroku. need to do some testing
+'''
 
 
 
 
 CURR_USER_KEY = 'curr_user'
+API_KEY = 9973533
 
 app = Flask(__name__)
-
+bootstrap = Bootstrap()
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/yumble'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///yumble.db')
 
 app.debug = False
-app.config['SECRET_KEY'] = 'secret'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'my_secret')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
 
 connect_db(app)
-app.app_context().push()
+app.app_context().push() 
     
 @app.before_request
 def add_user_to_g():
@@ -41,13 +51,15 @@ def add_user_to_g():
 
 def do_login(user):
     session[CURR_USER_KEY] = user.id
+    pass
     
 
 def do_logout():
     
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-
+    flash('LOGGED OUT')
+    return redirect('/login')
 
 
 
@@ -60,26 +72,31 @@ def home():
 #################### Register/Login/Logout Routes ####################
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    
     form = RegisterUserForm()
+    last_user_added = User.query.order_by(User.id.desc()).first()
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
-
-        
-        register_new_user = User.register_user(username, password, email)
-        
-        db.session.add(register_new_user)
-            
-        try:
+        # try:
+            new_user = User.register_user(
+                                        id=last_user_added.id + 1,
+                                        username=form.username.data,
+                                        password=form.password.data,
+                                        email=form.email.data,
+                                        bio=form.bio.data,
+                                        img=form.img.data
+                                        )
             db.session.commit()
             
-        except IntegrityError:
-            form.user.errors.append('Username already exists. Please choose another')
-            return render_template('register.html')
-        flash('SUCCESS! USER CREATED')
-        return redirect('/')
-    return render_template('register.html', form=form)
+        # except IntegrityError:
+        #     flash('Username already exists. Please choose another')
+        #     return render_template('register.html', form=form)
+        
+            do_login(new_user)
+        
+            return redirect('/')
+    
+    else:
+        return render_template('register.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -103,7 +120,8 @@ def login():
 @app.route('/logout')
 def logout():
     
-    do_logout()
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
     
     flash('Goodbye')
     return redirect('/')
@@ -114,9 +132,21 @@ def logout():
 def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
-    print(user)
+    user_matches = Match.query.filter_by(user_id=user_id).all()
+    match_matches = Match.query.filter_by(match_id=user_id).all()
     
-    return render_template('user_profile.html', user=user, favorites=favorites)
+    my_matches = [match.id for match in g.user.matches]
+    their_matches = [match.id for match in user.matches]
+    
+    
+    return render_template('user_profile.html', 
+                           user=user, 
+                           favorites=favorites, 
+                           matches=user_matches, 
+                           match_matches=match_matches,
+                           my_matches=my_matches,
+                           their_matches=their_matches)
+    
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
@@ -125,6 +155,49 @@ def view_user_favorites(user_id):
 
     return render_template('favorites.html', user=user, favorites=favorites)
 
+
+@app.route('/users/<user_id>/get_favorites', methods=['GET'])
+def get_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    all_favs = [fav.getTitles() for fav in favorites]
+    
+    
+    return jsonify(all_favs=all_favs)
+
+
+
+
+
+######################################   Match Routes   ########################################################
+@app.route('/users/<user_id>/find_matches', methods=['GET', 'POST'])
+def find_matches(user_id):
+    user = User.query.get_or_404(user_id)
+    all_users = User.query.all()
+    rando_user = random.choice(all_users)
+    rando_user_favs = Favorite.query.filter_by(user_id=rando_user.id)
+    
+    my_matches = [match.id for match in g.user.matches]
+    their_matches = [match.id for match in user.matches]
+
+
+    return render_template('matches.html', rando_user=rando_user, rando_user_favs=rando_user_favs,my_matches=my_matches, their_matches=their_matches)
+
+@app.route('/users/<user_id>/another_match', methods=['GET', 'POST'])
+def get_different_match(user_id):
+    return redirect(f'/users/{user_id}/find_matches')
+
+@app.route('/users/<user_id>/add_to_matches/<match_id>', methods=['GET', 'POST'])
+def add_to_matches(user_id, match_id):
+    user = User.query.get_or_404(user_id)
+    match = User.query.get_or_404(match_id)
+
+    g.user.matches.append(match)
+
+    db.session.commit()
+
+    flash('You liked a user!')
+    return redirect(f'/users/{user_id}/profile')
 
 
 
@@ -186,12 +259,21 @@ def add_to_favorites(recipe_id):
     return redirect('/')
         
         
-        
-'''
-commit notes:
-Current functionality
-    1 - can multisearch by ingredients. Click on individual recipes to be taken to a recipe detail page. 
-    2 - started working on db models. First task is:
-                                            ability to add recipe to a favorites list
+#####################################   Message Routes   #############################################
+@app.route('/users/<int:user_id>/messages')
+def view_messages(user_id):
+    user_id = g.user.id
+    messages = g.user.received_msgs.all()
+    
+    return render_template('view_messages.html', messages=messages)
 
-'''
+@app.route('/send_message/<recipient>', methods=['GET', 'POST'])
+def send_message(recipient):
+    user = User.query.filter_by(username=recipient).first_or_404()
+    form = MessageForm()
+    if form.validate_on_submit():
+        msg = Message(author=g.user, recipient=user, body=form.message.data)
+        db.session.add(msg)
+        db.session.commit()
+        return redirect(f'/users/{g.user.id}/profile')
+    return render_template('send_message.html', form=form, recipient=recipient)

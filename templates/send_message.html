@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    
+    <h1>Send message</h1>
+    <div class="container">
+        <div class="form-group">
+        
+          
+          <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            {% for field in form if field.widget.input_type != 'hidden' %}
+            <p>
+              {{ field.label }}
+              {{ field (class_="form-control")}}
+              
+              {% for error in field.errors %}
+              {{ error }}
+              {% endfor %}
+            </p>
+            {% endfor %}
+           </form>
+        </div>
+        </div>
+
+
+
+
+
+
+
+{% endblock %}

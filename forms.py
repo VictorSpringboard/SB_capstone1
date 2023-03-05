@@ -1,5 +1,5 @@
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, DateTimeField, BooleanField
+from flask_wtf import FlaskForm 
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField
 from wtforms_alchemy import model_form_factory
 from models import db, User
 from wtforms.validators import InputRequired
@@ -19,5 +19,10 @@ class LoginForm(FlaskForm):
 class RegisterUserForm(FlaskForm):
     username = StringField('Username')
     password = PasswordField('Password')
-    email = StringField('Email address') 
+    email = StringField('Email')
+    bio = StringField('bio')
+    img = StringField('Image link')
     
+class MessageForm(FlaskForm):
+    message = TextAreaField('Message')
+    submit = SubmitField('Send message')

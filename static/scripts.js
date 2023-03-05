@@ -1,3 +1,139 @@
+<<<<<<< HEAD
+=======
+
+
+
+
+
+
+const draggable_list = document.getElementById('draggable-list');
+const recipes = draggable_list.getElementsByTagName('li')
+const recipe_titles = []
+
+for (let recipe of recipes){
+  recipe_titles.push(recipe.innerText.slice(3, recipe.innerText.length))
+}
+
+
+const richestPeople = [...recipe_titles]
+
+// Store listitems
+const listItems = [];
+
+let dragStartIndex;
+
+createList();
+
+// Insert list items into DOM
+function createList() {
+  [...richestPeople]
+  .map(a => ({ value: a}))
+  .sort((a, b) => a.sort - b.sort)
+  .map(a => a.value)
+  .forEach((person, index) => {
+    const listItem = document.createElement('li');
+
+      listItem.setAttribute('data-index', index);
+
+      listItem.innerHTML = `
+      <span class="number">${index + 1}</span>
+        <div class="draggable" draggable="true">
+        <p class="person-name">${person}</p>
+          <i class="fas fa-grip-lines"></i>
+        </div>
+      `;
+
+      listItems.push(listItem);
+
+      draggable_list.appendChild(listItem);
+    });
+
+  addEventListeners();
+}
+const numbers = document.querySelectorAll("[data-index]")
+for (let number of numbers){
+  if (number.getAttribute('data-index') < 3){
+    number.style.backgroundColor = '#FFFFE0';
+  }
+}
+
+
+
+
+
+function dragStart() {
+  // console.log('Event: ', 'dragstart');
+  dragStartIndex = +this.closest('li').getAttribute('data-index');
+}
+
+function dragEnter() {
+  // console.log('Event: ', 'dragenter');
+  this.classList.add('over');
+}
+
+function dragLeave() {
+  // console.log('Event: ', 'dragleave');
+  this.classList.remove('over');
+}
+
+function dragOver(e) {
+  // console.log('Event: ', 'dragover');
+  e.preventDefault();
+}
+
+function dragDrop() {
+  // console.log('Event: ', 'drop');
+  const dragEndIndex = +this.getAttribute('data-index');
+  swapItems(dragStartIndex, dragEndIndex);
+
+  this.classList.remove('over');
+}
+
+// Swap list items that are drag and drop
+function swapItems(fromIndex, toIndex) {
+  const itemOne = listItems[fromIndex].querySelector('.draggable');
+  const itemTwo = listItems[toIndex].querySelector('.draggable');
+
+  listItems[fromIndex].appendChild(itemTwo);
+  listItems[toIndex].appendChild(itemOne);
+}
+
+// Check the order of list items
+function checkOrder() {
+  listItems.forEach((listItem, index) => {
+    const personName = listItem.querySelector('.draggable').innerText.trim();
+
+    if (personName !== richestPeople[index]) {
+      listItem.classList.add('wrong');
+    } else {
+      listItem.classList.remove('wrong');
+      listItem.classList.add('right');
+    }
+  });
+}
+
+function addEventListeners() {
+  const draggables = document.querySelectorAll('.draggable');
+  const dragListItems = document.querySelectorAll('.draggable-list li');
+
+  draggables.forEach(draggable => {
+    draggable.addEventListener('dragstart', dragStart);
+  });
+
+  dragListItems.forEach(item => {
+    item.addEventListener('dragover', dragOver);
+    item.addEventListener('drop', dragDrop);
+    item.addEventListener('dragenter', dragEnter);
+    item.addEventListener('dragleave', dragLeave);
+  });
+}
+
+check.addEventListener('click', checkOrder);
+
+
+
+    
+>>>>>>> messages
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
 
@@ -14,20 +150,33 @@ async function getSomeData(){
             // console.log(res.data.meals)
             for (let mealId of res.data.meals){
                 mealIds.push(parseInt(mealId.idMeal, 10))
+<<<<<<< HEAD
             }
+=======
+            }    
+>>>>>>> messages
         }).then(() => {
             
             for (let id of mealIds){
                 const moreData = axios.get(`https://www.themealdb.com/api/json/v2/${API_KEY}/lookup.php?`, {params: {i:id}})
                 mealPromises.push(moreData)
+<<<<<<< HEAD
             }
         })
+=======
+            }    
+        })    
+>>>>>>> messages
             Promise.all(mealPromises)
             .then(arr =>{
                 // console.log(arr[0].data.meals[0].strMeal)
                 for (let i = 0; i < mealPromises.length; i++){
                     mealObjs.push(arr[i].data.meals[0])
+<<<<<<< HEAD
                 }
+=======
+                }    
+>>>>>>> messages
             }).then(()=>{  
                 for (let mealItem of mealObjs){
                     const item = document.createElement('div')
@@ -38,6 +187,7 @@ async function getSomeData(){
                                             <h5 class="card-title">${mealItem.strMeal}</h5>
                                             <p class="card-text">${mealItem.strInstructions}</p>
                                             <a href="/recipe_details/${mealItem.idMeal}" class="btn btn-primary">Go somewhere</a>
+<<<<<<< HEAD
                                         </div>
                                 </div>`)
                 }
@@ -45,6 +195,15 @@ async function getSomeData(){
             })
                 
 }
+=======
+                                        </div>    
+                                </div>`)        
+                }                
+
+            })    
+                
+}            
+>>>>>>> messages
 
 
 
@@ -56,4 +215,10 @@ const searchButton = document.querySelector('#searchForm').addEventListener('sub
     e.preventDefault()
     getSomeData()
 
+<<<<<<< HEAD
 })
+=======
+})    
+
+
+>>>>>>> messages
