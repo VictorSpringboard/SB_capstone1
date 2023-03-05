@@ -3,7 +3,6 @@ from models import db, connect_db, User, Favorite, Match
 from app import app
 import datetime
 import requests
-from secrets import API_KEY
 from sqlalchemy.exc import IntegrityError
 
 connect_db(app)

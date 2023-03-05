@@ -20,10 +20,11 @@ bootstrap = Bootstrap()
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///yumble.db')
 
 app.debug = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'my_secret')
