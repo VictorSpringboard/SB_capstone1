@@ -10,6 +10,13 @@ from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
 import os
 
+'''
+march 4 commit notes:
+finally deployed to heroku. need to do some testing
+'''
+
+
+
 
 CURR_USER_KEY = 'curr_user'
 API_KEY = 9973533
