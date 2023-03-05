@@ -54,3 +54,5 @@ for i in range(len(matches_df)):
     new = Match.add_matches(user_id=matches_df[i]['user_id'],
                             match_id=matches_df[i]['match_id']
                                  )
+    db.session.add(new)
+    db.session.commit()
