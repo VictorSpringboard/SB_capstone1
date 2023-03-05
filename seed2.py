@@ -14,7 +14,7 @@ def drop_create():
 drop_create()
 
 
-df = read_csv(r'C:\Users\valex\Desktop\Springboard_Assignments\SB_capstone1\data_dumps\users_db.csv', index_col='id')
+df = read_csv('users_db.csv', index_col='id')
 df_dict = df.to_dict('id')
 
 for i in range(1, 156):
@@ -28,7 +28,7 @@ for i in range(1, 156):
     db.session.commit()
    
    
-faves_db = read_csv(r'C:\Users\valex\Desktop\Springboard_Assignments\SB_capstone1\data_dumps\favorites_db.csv')
+faves_db = read_csv('favorites_db.csv')
 faves_df = faves_db.to_dict('id')
 for i in range(len(faves_df)):
     # pass
