@@ -17,10 +17,10 @@ API_KEY = 9973533
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}

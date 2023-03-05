@@ -28,6 +28,26 @@ class Favorite(db.Model):
     
     def getTitles(self):
         return {'title': self.title}
+    
+    @classmethod
+    def add_favorites(cls,
+                      user_id,
+                      recipe_id,
+                      title,
+                      ingredients,
+                      instructions,
+                      measurements,
+                      category,
+                      area,
+                      original):
+        
+        return cls(user_id=user_id, recipe_id=recipe_id,
+                   title=title, ingredients=ingredients,
+                   instructions=instructions,
+                   measurements=measurements, category=category,
+                   area=area, original=original)
+    
+    
 
 class Match(db.Model):
     __tablename__ = 'matches'

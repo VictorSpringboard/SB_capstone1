@@ -1,3 +1,4 @@
+id,username,password,email,bio,img
 1,dcutbush0,$2b$12$neA/xBwfJLba2YEOCbPAK.5PK3Uz/DJqaUgt5YX/vEk5k51br4tW6,cdenver0@psu.edu,Fully-configurable multi-state internet solution,https://randomuser.me/api/portraits/men/4.jpg
 2,rtroak1,$2b$12$cSA8ZhIbjePVv.EXC228EuvLgY/ohtSWrUIIh9LmQ50qaMBXlfb5i,enellen1@free.fr,Quality-focused directional flexibility,https://randomuser.me/api/portraits/women/78.jpg
 3,jlebrom2,$2b$12$BGt1wHR4KTGi63FfCWI9CuhLZgD6eICwlNft0bZ7fUSWDpSP3ztpW,jfladgate2@zdnet.com,Business-focused demand-driven knowledge user,https://randomuser.me/api/portraits/women/25.jpg
