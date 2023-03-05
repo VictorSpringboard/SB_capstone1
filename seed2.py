@@ -14,7 +14,7 @@ def drop_create():
 drop_create()
 
 
-df = read_csv('150_users.csv')
+df = read_csv('users_db.csv')
 df_dict = df.to_dict('id')
 
 for i in range(1, 156):
