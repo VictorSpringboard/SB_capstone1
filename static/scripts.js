@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 
 
 
@@ -133,7 +131,6 @@ check.addEventListener('click', checkOrder);
 
 
     
->>>>>>> messages
 const API_KEY = 9973533
 const QUERY = document.getElementById('searchBox')
 
@@ -150,33 +147,20 @@ async function getSomeData(){
             // console.log(res.data.meals)
             for (let mealId of res.data.meals){
                 mealIds.push(parseInt(mealId.idMeal, 10))
-<<<<<<< HEAD
-            }
-=======
             }    
->>>>>>> messages
         }).then(() => {
             
             for (let id of mealIds){
                 const moreData = axios.get(`https://www.themealdb.com/api/json/v2/${API_KEY}/lookup.php?`, {params: {i:id}})
                 mealPromises.push(moreData)
-<<<<<<< HEAD
-            }
-        })
-=======
             }    
         })    
->>>>>>> messages
             Promise.all(mealPromises)
             .then(arr =>{
                 // console.log(arr[0].data.meals[0].strMeal)
                 for (let i = 0; i < mealPromises.length; i++){
                     mealObjs.push(arr[i].data.meals[0])
-<<<<<<< HEAD
-                }
-=======
                 }    
->>>>>>> messages
             }).then(()=>{  
                 for (let mealItem of mealObjs){
                     const item = document.createElement('div')
@@ -187,15 +171,6 @@ async function getSomeData(){
                                             <h5 class="card-title">${mealItem.strMeal}</h5>
                                             <p class="card-text">${mealItem.strInstructions}</p>
                                             <a href="/recipe_details/${mealItem.idMeal}" class="btn btn-primary">Go somewhere</a>
-<<<<<<< HEAD
-                                        </div>
-                                </div>`)
-                }
-
-            })
-                
-}
-=======
                                         </div>    
                                 </div>`)        
                 }                
@@ -203,7 +178,6 @@ async function getSomeData(){
             })    
                 
 }            
->>>>>>> messages
 
 
 
@@ -215,10 +189,6 @@ const searchButton = document.querySelector('#searchForm').addEventListener('sub
     e.preventDefault()
     getSomeData()
 
-<<<<<<< HEAD
-})
-=======
 })    
 
 
->>>>>>> messages
