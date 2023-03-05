@@ -81,7 +81,7 @@ class Message(db.Model):
 class User(db.Model):
     __tablename__ = 'users'
     
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True)
     password = db.Column(db.Text, nullable=False)
     email = db.Column(db.String(50), nullable=False)
@@ -104,28 +104,32 @@ class User(db.Model):
     
     
     @classmethod
-    def register_user(cls, id, username, pwd, email, bio, img):
+    def register_user(cls, id, username, password, email, bio, img):
         
-        hashed = bcrypt.generate_password_hash(pwd)
+        
+        hashed = bcrypt.generate_password_hash(password)
         
         hashed_utf8 = hashed.decode('utf8')
         
-        return cls(id=id,
-                    username=username, 
+        user = User(id=id,
+                    username=username,
                     password=hashed_utf8,
                     email=email,
                     bio=bio,
                     img=img)
+        db.session.add(user)
+        return user
     
     @classmethod
-    def authenticate_user(cls, username, pwd):
+    def authenticate_user(cls, username, password):
         
-        u = User.query.filter_by(username=username).first()
+        u = cls.query.filter_by(username=username).first()
         
-        if u and bcrypt.check_password_hash(u.password, pwd):
-            return u
-        else:
-            return False
+        if u:
+            is_auth = bcrypt.check_password_hash(u.password, password)
+            if is_auth:
+                return u
+        return False
         
     
     

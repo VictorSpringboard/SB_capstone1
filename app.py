@@ -51,13 +51,15 @@ def add_user_to_g():
 
 def do_login(user):
     session[CURR_USER_KEY] = user.id
+    pass
     
 
 def do_logout():
     
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-
+    flash('LOGGED OUT')
+    return redirect('/login')
 
 
 
@@ -70,26 +72,31 @@ def home():
 #################### Register/Login/Logout Routes ####################
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    
     form = RegisterUserForm()
+    last_user_added = User.query.order_by(User.id.desc()).first()
     if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        email = form.email.data
-
-        
-        register_new_user = User.register_user(username, password, email)
-        
-        db.session.add(register_new_user)
-            
-        try:
+        # try:
+            new_user = User.register_user(
+                                        id=last_user_added.id + 1,
+                                        username=form.username.data,
+                                        password=form.password.data,
+                                        email=form.email.data,
+                                        bio=form.bio.data,
+                                        img=form.img.data
+                                        )
             db.session.commit()
             
-        except IntegrityError:
-            form.user.errors.append('Username already exists. Please choose another')
-            return render_template('register.html')
-        flash('SUCCESS! USER CREATED')
-        return redirect('/')
-    return render_template('register.html', form=form)
+        # except IntegrityError:
+        #     flash('Username already exists. Please choose another')
+        #     return render_template('register.html', form=form)
+        
+            do_login(new_user)
+        
+            return redirect('/')
+    
+    else:
+        return render_template('register.html', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -113,7 +120,8 @@ def login():
 @app.route('/logout')
 def logout():
     
-    do_logout()
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
     
     flash('Goodbye')
     return redirect('/')

@@ -19,8 +19,9 @@ class LoginForm(FlaskForm):
 class RegisterUserForm(FlaskForm):
     username = StringField('Username')
     password = PasswordField('Password')
-    email = StringField('Email address') 
-    
+    email = StringField('Email')
+    bio = StringField('bio')
+    img = StringField('Image link')
     
 class MessageForm(FlaskForm):
     message = TextAreaField('Message')
