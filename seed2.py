@@ -28,22 +28,29 @@ def drop_create():
 #     db.session.commit()
    
    
-faves_db = read_csv('favorites_db.csv')
-faves_df = faves_db.to_dict('id')
-for i in range(len(faves_df)):
+# faves_db = read_csv('favorites_db.csv')
+# faves_df = faves_db.to_dict('id')
+# for i in range(len(faves_df)):
+#     # pass
+#     new = Favorite.add_favorites(user_id=faves_df[i]['user_id'],
+#                                  recipe_id=faves_df[i]['recipe_id'],
+#                                  title=faves_df[i]['title'],
+#                                  ingredients=faves_df[i]['ingredients'],
+#                                  measurements=faves_df[i]['measurements'],
+#                                  instructions=faves_df[i]['instructions'],
+#                                  category=faves_df[i]['category'],
+#                                  area=faves_df[i]['area'],
+#                                  original=faves_df[i]['original'],
+#                                  )
+    # db.session.add(new)
+    # db.session.commit()
+    
+    
+matches_db = read_csv('matches_db.csv')
+matches_df = matches_db.to_dict('id')
+
+for i in range(len(matches_df)):
     # pass
-    new = Favorite.add_favorites(user_id=faves_df[i]['user_id'],
-                                 recipe_id=faves_df[i]['recipe_id'],
-                                 title=faves_df[i]['title'],
-                                 ingredients=faves_df[i]['ingredients'],
-                                 measurements=faves_df[i]['measurements'],
-                                 instructions=faves_df[i]['instructions'],
-                                 category=faves_df[i]['category'],
-                                 area=faves_df[i]['area'],
-                                 original=faves_df[i]['original'],
+    new = Match.add_matches(user_id=matches_df[i]['user_id'],
+                            match_id=matches_df[i]['match_id']
                                  )
-    db.session.add(new)
-    db.session.commit()
-    
-    
-# matches_db = read_csv(r'C:\Users\valex\Desktop\Springboard_Assignments\SB_capstone1\data_dumps\matches_db.csv')

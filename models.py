@@ -57,6 +57,13 @@ class Match(db.Model):
 
     def __repr__(self):
         return f'The user id {self.user_id} likes {self.match_id}'
+    
+    @classmethod
+    def add_matches(cls,
+                    user_id,
+                    match_id):
+        return cls(user_id=user_id,
+                   match_id=match_id)
 
 
 # Code adapted from a flask tutorial at blog.miguelgrinberg.com
