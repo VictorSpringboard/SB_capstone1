@@ -17,14 +17,14 @@ drop_create()
 df = read_csv('users_db.csv')
 df_dict = df.to_dict('id')
 
-for i in range(1, 155):
+for i in range(len(df_dict)):
     new = User.register_user(id=df_dict[i]['id'],
                 username=df_dict[i]['username'],
                 pwd=df_dict[i]['password'],
                 email=df_dict[i]['email'],
                 bio=df_dict[i]['bio'],
                 img=df_dict[i]['img'])
-    # db.session.add(new)
+    db.session.add(new)
     db.session.commit()
    
    
@@ -54,5 +54,5 @@ for i in range(len(matches_df)):
     new = Match.add_matches(user_id=matches_df[i]['user_id'],
                             match_id=matches_df[i]['match_id']
                                  )
-    # db.session.add(new)
+    db.session.add(new)
     db.session.commit()
