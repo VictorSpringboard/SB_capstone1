@@ -130,23 +130,24 @@ def logout():
 #####################################  User Routes  ###################################################
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
 def view_user_profile(user_id):
+    
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     my_matches = Match.query.filter_by(user_id=user_id).all()
     their_matches = Match.query.filter_by(match_id=user_id).all()
-    
+
     my_match_ids = [match.id for match in g.user.matches]
     their_match_ids = [match.id for match in user.matches]
-    
-    
     return render_template('user_profile.html', 
-                           user=user, 
-                           favorites=favorites, 
-                           my_matches=my_matches, 
-                           their_matches=their_matches,
-                           my_match_ids=my_match_ids,
-                           their_match_ids=their_match_ids)
-    
+                                user=user, 
+                                favorites=favorites, 
+                                my_matches=my_matches, 
+                                their_matches=their_matches,
+                                my_match_ids=my_match_ids,
+                                their_match_ids=their_match_ids)
+
+
+
 
 @app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
 def view_user_favorites(user_id):
@@ -276,4 +277,4 @@ def send_message(recipient):
         db.session.add(msg)
         db.session.commit()
         return redirect(f'/users/{g.user.id}/profile')
-    return render_template('send_message.html', form=form, recipient=recipient)
+    return render_template('send_message.html', form=form, recipient=user)

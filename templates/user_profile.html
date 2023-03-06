@@ -7,12 +7,7 @@
     
     {% block body %}
 
-
-
-
-    {% if g.user.id == user.id %}
-
-
+                    <h2>My Info</h2>
                     <img src="{{user.img}}" alt="" width="300">
                     <p>Username: {{user.username}}</p>
                     <p>Email: {{user.email}}</p>
@@ -22,10 +17,7 @@
                       <button>View my messages</button>
                     </form>
 
-
-
-    
-                    <h2>Your favorite recipes</h2>
+                    <h2>My favorite recipes</h2>
     
                     <ol>
                         {% for fav in favorites %}
@@ -33,37 +25,31 @@
                         {% endfor %}
                     </ol>
 
-                    <p>There go my matches</p>
-                    {% for match in my_matches %}
-                      <p>{{match}}</p>
-                    {% endfor %}
 
-    
-    
-    {% else %}
-    
+                    <h3>Testing Area</h3>
+                    {% if g.user.id == user.id %}
+
+                        <p>This is my profile</p>
+
+                    {% else %}
+                        <p>This is not my profile</p>
+
+                        {% if user.id in my_match_ids %}
+                          <p>I like this person</p>
+                                {% if g.user.id in their_match_ids %}
+                                  <p>This person likes me</p>
+                                  <form action="/send_message/{{user.username}}">
+                                    <button>Send them a message</button>
+                                  </form>
+                                {% else %}
+                                  <p>This person doesn't like me</p>
+                                {% endif %}
+                        {% endif %}
+                          
+                    {% endif %}
 
 
-    <p>Username: {{user.username}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>About: {{user.bio}}</p>
-    
-    
-    <h2>These are {{user.username}}'s favorite recipes</h2>
-    
-    <ol>
-        {% for fav in favorites %}
-        <li><a href="/recipe_details/{{fav.recipe_id}}">{{fav.title}}</a></li>
-        {% endfor %}
-    </ol>
-    
-    
-    {% endif %}
-    
-    
-    
-    
-    
-    
-    
+
+
+
     {% endblock body %}
