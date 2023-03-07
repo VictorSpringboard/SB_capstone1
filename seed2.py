@@ -5,6 +5,15 @@ import datetime
 import requests
 from sqlalchemy.exc import IntegrityError
 
+
+'''
+NOTE:
+When coding on my computer at work, run this seed file to populate yumble.db.
+
+'''
+
+
+
 connect_db(app)
 app.app_context().push()
 
