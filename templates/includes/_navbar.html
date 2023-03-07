@@ -1,6 +1,6 @@
 
 {% if g.user %}
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <ul class="navbar-nav mr-auto">
     <li class="nav-item active">
       <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
@@ -23,14 +23,14 @@
       <!-- <li class="nav-item">
         <a class="nav-link" href="/change_password">change password</a>
       </li> -->
-      <span class="navbar-text">
-        currently logged in as <form action="/users/{{g.user.id}}/profile">
-          <button class="btn btn-outline-success">{{g.user.username}}</button>
+
+        <form action="/users/{{g.user.id}}/profile">
+          <button class="btn btn-outline-success">Currently logged in as {{g.user.username}}</button>
         </form>
         
         
         <!-- <a style='color:seagreen' class="nav-link" href="/users/{{g.user.username}}/profile">{{g.user.username}}</a>  -->
-      </span>
+      
   </div>
 </nav>
 {% else %}
