@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+    
+<h1>Here's who I like</h1>
+{% for liked_user in user.matches %}
+<p>{{liked_user.username}}</p>
+    
+{% endfor %}
+
+<h1>Here's who likes me</h1>
+{% for liking_user in user.matched_by %}
+<p>{{liking_user.username}}</p>
+
+{% endfor %}
+
+
+{% endblock %}

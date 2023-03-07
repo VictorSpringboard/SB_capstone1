@@ -33,7 +33,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///yumble.db')
 
-app.debug = True
+app.debug = False
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'my_secret')
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 toolbar = DebugToolbarExtension(app)
@@ -129,6 +129,19 @@ def logout():
 
 
 #####################################  User Routes  ###################################################
+
+@app.route('/users/<user_id>/show_likes', methods=['GET', 'POST'])
+def show_liking(user_id):
+    '''Show a list of people this user likes'''
+
+    user = User.query.get_or_404(user_id)
+    return render_template('user_likes.html', user=user)
+
+
+
+
+
+
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
 def view_user_profile(user_id):
     
@@ -166,6 +179,8 @@ def get_user_favorites(user_id):
     
     
     return jsonify(all_favs=all_favs)
+
+
 
 
 

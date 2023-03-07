@@ -55,7 +55,7 @@ class Match(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
     match_id = db.Column(db.Integer,db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
-    
+
 
     def __repr__(self):
         return f'{self.match_id}'
@@ -94,12 +94,26 @@ class User(db.Model):
     favorites = db.relationship('User', secondary='favorites', primaryjoin=(Favorite.user_id == id))
 
     matches = db.relationship('User', secondary='matches', primaryjoin=(Match.user_id == id), secondaryjoin=(Match.match_id == id))
+
+    matched_by = db.relationship('User', secondary='matches', primaryjoin=(Match.match_id == id), secondaryjoin=Match.user_id == id)
     
     sent_msgs = db.relationship('Message', foreign_keys=Message.sender_id, backref='author', lazy='dynamic')
     received_msgs = db.relationship('Message', foreign_keys=Message.receiver_id, backref='recipient', lazy='dynamic')
     def __repr__(self):
         return f'User: {self.username}, email: {self.email}'
     
+    def is_liking(self, other_user):
+        '''Does this user like the other user?'''
+
+        found_user_list = [user for user in self.matches if user == other_user]
+        return len(found_user_list) == 1
+
+    def is_liked_by(self, other_user):
+        '''Is this user liked by the other user'''
+        
+        found_user_list = [user for user in self.matched_by if user == other_user]
+        return len(found_user_list) == 1
+        
     def get_messages(self):
         return Message.query.all()
     
