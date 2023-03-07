@@ -5,3 +5,8 @@ test_yumble.db
 yumble.db
 /scratch/scratch.html
 /scratch/scratch.js
+/.vscode
+/capstone_v1/
+/capstone_v1/__pycache__
+
+
