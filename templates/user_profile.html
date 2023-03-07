@@ -25,6 +25,13 @@
                         {% endfor %}
                     </ol>
 
+                    <h3>These are my matches</h3>
+                    <ol>
+                      {% for match in my_matches %}
+                        <li>{{match}}</li>
+                      {% endfor %}
+                    </ol>
+
 
                     <h3>Testing Area</h3>
                     {% if g.user.id == user.id %}
@@ -43,10 +50,14 @@
                                   </form>
                                 {% else %}
                                   <p>This person doesn't like me</p>
+                                  <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
+                                    <button>Add them to my matches</button>
+                                  </form>
                                 {% endif %}
                         {% endif %}
                           
                     {% endif %}
+
 
 
 

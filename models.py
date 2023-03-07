@@ -56,7 +56,7 @@ class Match(db.Model):
     match_id = db.Column(db.Integer,db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
     def __repr__(self):
-        return f'The user id {self.user_id} likes {self.match_id}'
+        return f'{self.match_id}'
     
     @classmethod
     def add_matches(cls,
