@@ -14,13 +14,13 @@ def drop_create():
 drop_create()
 
 
-df = read_csv('users_db.csv')
+df = read_csv('users_with_hashed_passwords.csv')
 df_dict = df.to_dict('id')
 
 for i in range(len(df_dict)):
     new = User.register_user(id=df_dict[i]['id'],
                 username=df_dict[i]['username'],
-                pwd=df_dict[i]['password'],
+                password=df_dict[i]['password'],
                 email=df_dict[i]['email'],
                 bio=df_dict[i]['bio'],
                 img=df_dict[i]['img'])
