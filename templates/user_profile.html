@@ -38,24 +38,18 @@
 
                         <p>This is my profile</p>
 
+                        <h4>Here's who I like</h4>
+                            {% for liked_user in user.matches %}
+                                <p>{{liked_user.username}}</p>
+                            {% endfor %}
+                        <h4>Here's who likes me</h4>
+                            {% for liking_user in user.matched_by %}
+                                <p>{{liking_user.username}}</p>
+                            {% endfor %}
                     {% else %}
                         <p>This is not my profile</p>
 
-                        {% if user.id in my_match_ids %}
-                          <p>I like this person</p>
-                                {% if g.user.id in their_match_ids %}
-                                  <p>This person likes me</p>
-                                  <form action="/send_message/{{user.username}}">
-                                    <button>Send them a message</button>
-                                  </form>
-                                {% else %}
-                                  <p>This person doesn't like me</p>
-                                  {% endif %}
-                                  {% else %}
-                                  <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
-                                    <button>Add them to my matches</button>
-                                  </form>
-                        {% endif %}
+                        
                           
                     {% endif %}
 
