@@ -46,15 +46,36 @@
                             {% for liking_user in user.matched_by %}
                                 <p>{{liking_user.username}}</p>
                             {% endfor %}
-                    {% else %}
-                        <p>This is not my profile</p>
+                            {% else %}
+                            <p>This is not my profile</p>
+                            
+                            <h4>Here's who I like</h4>
 
+
+                                {% for liked_user in user.matches %}
+                                    <p>{{liked_user.username}}</p>
+                                    <p></p>
+                                {% endfor %}
+
+
+
+                            <h4>Here's who likes me</h4>
+                                {% for liking_user in user.matched_by %}
+                                    <p>{{liking_user.username}}</p>
+                                {% endfor %}
                         
                           
                     {% endif %}
 
-
-
+                    <h1>Do they like each other?</h1>
+                    {% for person in user.matches %}
+                      {% if user.is_liking(person) == user.is_liked_by(person) %}
+                        <p>Nice. It's {{person.username}}.</p>
+                        <form action="/send_message/{{person.username}}">
+                          <Button>Send {{person.username}} a message.</Button>
+                      </form>
+                      {% endif %}
+                    {% endfor %}
 
 
 
