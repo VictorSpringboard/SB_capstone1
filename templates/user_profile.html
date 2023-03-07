@@ -50,10 +50,11 @@
                                   </form>
                                 {% else %}
                                   <p>This person doesn't like me</p>
+                                  {% endif %}
+                                  {% else %}
                                   <form action="/users/{{g.user.id}}/add_to_matches/{{user.id}}">
                                     <button>Add them to my matches</button>
                                   </form>
-                                {% endif %}
                         {% endif %}
                           
                     {% endif %}
