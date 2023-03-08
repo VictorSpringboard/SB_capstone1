@@ -25,19 +25,16 @@
                         {% endfor %}
                     </ol>
 
-                    <h3>These are my matches</h3>
-                    <ol>
-                      {% for match in my_matches %}
-                        <li>{{match}}</li>
-                      {% endfor %}
-                    </ol>
 
 
                     <h3>Testing Area</h3>
                     {% if g.user.id == user.id %}
 
                         <p>This is my profile</p>
+                        <form action="/users/edit_profile">
+                            <button>Edit profile</button>
 
+                        </form>
                         <h4>Here's who I like</h4>
                             {% for liked_user in user.matches %}
                                 <p>{{liked_user.username}}</p>

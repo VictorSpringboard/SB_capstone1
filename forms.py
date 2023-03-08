@@ -26,3 +26,12 @@ class RegisterUserForm(FlaskForm):
 class MessageForm(FlaskForm):
     message = TextAreaField('Message')
     submit = SubmitField('Send message')
+
+class EditProfileForm(FlaskForm):
+
+    username = StringField('Username')
+    email = StringField('E-mail')
+    bio = StringField('Bio')
+    img = StringField('Image URL')
+    password = PasswordField('Confirm password')
+    submit = SubmitField('Save changes')

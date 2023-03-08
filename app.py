@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import LoginForm, RegisterUserForm, MessageForm
+from forms import LoginForm, RegisterUserForm, MessageForm, EditProfileForm
 from models import db, connect_db, User, Favorite, Match, Message
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
@@ -138,8 +138,23 @@ def show_liking(user_id):
     return render_template('user_likes.html', user=user)
 
 
+@app.route('/users/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    
+    user = g.user
+    form = EditProfileForm(obj=user)
+    
+    if form.validate_on_submit():
+        user.username = form.username.data
+        user.email = form.email.data
+        user.bio = form.bio.data
+        user.img = form.img.data
 
-
+        db.session.commit()
+        return redirect(f'users/{g.user.id}/profile')
+        breakpoint()
+        flash('wrong password')
+    return render_template('edit_profile.html', form=form)
 
 
 @app.route('/users/<user_id>/profile', methods=['GET', 'POST'])
