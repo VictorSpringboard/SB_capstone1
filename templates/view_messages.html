@@ -5,7 +5,29 @@
 <h1>The Messages</h1>
 {% for message in messages %}
 
-    <p>{{message.body}}</p>
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">From: {{message.author.username}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{message.timestamp}}</h6>
+      <p class="card-text">{{message.body}}</p>
+        <form action="/users/delete_message">
+            <button>Delete message</button>
+        </form>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endfor %}
 
 
