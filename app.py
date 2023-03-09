@@ -24,10 +24,10 @@ API_KEY = 9973533
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -108,7 +108,6 @@ def login():
         password = form.password.data
         
         user = User.authenticate_user(username, password)
-        breakpoint()
         if user:
             do_login(user)
             flash(f'Welcome back {user.username}')
@@ -141,19 +140,23 @@ def show_liking(user_id):
 @app.route('/users/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     
-    user = g.user
-    form = EditProfileForm(obj=user)
+    form = EditProfileForm()
     
     if form.validate_on_submit():
-        user.username = form.username.data
-        user.email = form.email.data
-        user.bio = form.bio.data
-        user.img = form.img.data
-
-        db.session.commit()
-        return redirect(f'users/{g.user.id}/profile')
-        breakpoint()
-        flash('wrong password')
+        g.user.username = form.username.data if form.username.data else g.user.username
+        g.user.email = form.email.data if form.email.data else g.user.email
+        g.user.bio = form.bio.data if form.bio.data else g.user.bio
+        g.user.img = form.img.data if form.img.data else g.user.img
+        
+        if g.user == g.user.authenticate_user(g.user.username, form.password.data):
+            db.session.add(g.user)
+            db.session.commit()
+            flash('Profile successfully edited')
+            return redirect(f'/users/{g.user.id}/profile')
+        else:
+            flash('wrong password')
+            return redirect(f'/users/{g.user.id}/profile')
+            
     return render_template('edit_profile.html', form=form)
 
 
@@ -301,3 +304,13 @@ def send_message(recipient):
         db.session.commit()
         return redirect(f'/users/{g.user.id}/profile')
     return render_template('send_message.html', form=form, recipient=user)
+
+@app.route('/users/<int:message_id>/delete_message', methods=['GET', 'POST'])
+def delete_message(message_id):
+    
+    user_id = g.user.id
+    msg = Message.query.get(message_id)
+    db.session.delete(msg)
+    db.session.commit()
+    
+    return redirect(f'/users/{user_id}/messages')
