@@ -108,7 +108,6 @@ def login():
         password = form.password.data
         
         user = User.authenticate_user(username, password)
-        breakpoint()
         if user:
             do_login(user)
             flash(f'Welcome back {user.username}')
@@ -141,19 +140,23 @@ def show_liking(user_id):
 @app.route('/users/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
     
-    user = g.user
-    form = EditProfileForm(obj=user)
+    form = EditProfileForm()
     
     if form.validate_on_submit():
-        user.username = form.username.data
-        user.email = form.email.data
-        user.bio = form.bio.data
-        user.img = form.img.data
-
-        db.session.commit()
-        return redirect(f'users/{g.user.id}/profile')
-        breakpoint()
-        flash('wrong password')
+        g.user.username = form.username.data if form.username.data else g.user.username
+        g.user.email = form.email.data if form.email.data else g.user.email
+        g.user.bio = form.bio.data if form.bio.data else g.user.bio
+        g.user.img = form.img.data if form.img.data else g.user.img
+        
+        if g.user == g.user.authenticate_user(g.user.username, form.password.data):
+            db.session.add(g.user)
+            db.session.commit()
+            flash('Profile successfully edited')
+            return redirect(f'/users/{g.user.id}/profile')
+        else:
+            flash('wrong password')
+            return redirect(f'/users/{g.user.id}/profile')
+            
     return render_template('edit_profile.html', form=form)
 
 

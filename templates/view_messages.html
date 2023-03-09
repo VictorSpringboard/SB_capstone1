@@ -11,7 +11,7 @@
         <h6 class="card-subtitle mb-2 text-muted">{{message.timestamp.strftime('%Y-%m-%d %H:%M %p')}}</h6>
       <p class="card-text">{{message.body}}</p>
       <a href="/users/{{message.id}}/delete_message" class="btn btn-danger">Delete message</a>
-      <a href="/users/delete_message" class="btn btn-info">Send reply</a>
+      <a href="/send_message/{{message.author.username}}" class="btn btn-info">Send reply</a>
     </div>
   </div>
 
