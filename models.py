@@ -76,7 +76,7 @@ class Message(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     receiver_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     body = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True, default = datetime.datetime.utcnow.strftime('%Y-%M-%d %H:%M %p'))
+    timestamp = db.Column(db.DateTime, index=True, default = datetime.datetime.utcnow)
 
 
     
