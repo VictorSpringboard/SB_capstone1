@@ -25,6 +25,8 @@ class Favorite(db.Model):
     category = db.Column(db.Text, nullable=False)
     area = db.Column(db.Text, nullable=False)
     original = db.Column(db.Text, nullable=False)
+    is_top_3 = db.Column(db.Boolean)
+    order = db.Column(db.Integer)
     
     def getTitles(self):
         return {'title': self.title}
@@ -39,13 +41,16 @@ class Favorite(db.Model):
                       measurements,
                       category,
                       area,
-                      original):
+                      original,
+                      is_top_3,
+                      order):
         
         return cls(user_id=user_id, recipe_id=recipe_id,
                    title=title, ingredients=ingredients,
                    instructions=instructions,
                    measurements=measurements, category=category,
-                   area=area, original=original)
+                   area=area, original=original,
+                   is_top_3=is_top_3, order=order)
     
     
 
