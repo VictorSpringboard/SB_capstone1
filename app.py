@@ -277,7 +277,9 @@ def add_to_favorites(recipe_id):
                                 instructions=res_dict['strInstructions'],
                                 category=res_dict['strCategory'],
                                 area=res_dict['strArea'],
-                                original=res_dict['strSource'])
+                                original=res_dict['strSource'],
+                                is_top_3=False,
+                                order=0)
         db.session.add(new_favorite)
         
     flash('Successfully added recipe to favorites!')
