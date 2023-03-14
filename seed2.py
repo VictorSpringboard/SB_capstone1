@@ -51,7 +51,7 @@ for i in range(len(faves_df)):
                                  area=faves_df[i]['area'],
                                  original=faves_df[i]['original'],
                                  is_top_3=False,
-                                 order=0
+                                 order=i
                                  )
     db.session.add(new)
     db.session.commit()
