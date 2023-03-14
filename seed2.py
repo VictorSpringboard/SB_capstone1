@@ -23,7 +23,7 @@ def drop_create():
 drop_create()
 
 
-df = read_csv('users_with_hashed_passwords.csv')
+df = read_csv('./dummy_data/users_with_hashed_passwords.csv')
 df_dict = df.to_dict('id')
 
 for i in range(len(df_dict)):
@@ -37,7 +37,7 @@ for i in range(len(df_dict)):
     db.session.commit()
    
    
-faves_db = read_csv('favorites_db.csv')
+faves_db = read_csv('./dummy_data/favorites_db.csv')
 faves_df = faves_db.to_dict('id')
 for i in range(len(faves_df)):
     # pass
@@ -57,7 +57,7 @@ for i in range(len(faves_df)):
     db.session.commit()
     
     
-matches_db = read_csv('matches_db.csv')
+matches_db = read_csv('./dummy_data/matches_db.csv')
 matches_df = matches_db.to_dict('id')
 
 for i in range(len(matches_df)):
