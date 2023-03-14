@@ -1,4 +1,4 @@
-#Capstone Project 1
+# Capstone Project 1
 
 ## Yumble - a dating app for foodies
 
