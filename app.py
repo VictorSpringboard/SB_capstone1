@@ -24,10 +24,10 @@ API_KEY = 9973533
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -166,6 +166,11 @@ def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
+    for ind, fav in enumerate(favorites):
+        fav.order = ind + 1
+        print(f'{fav.title} is number {fav.order}')
+
+
     return render_template('user_profile.html', 
                                 user=user, 
                                 favorites=favorites)
@@ -173,22 +178,7 @@ def view_user_profile(user_id):
 
 
 
-@app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
-def view_user_favorites(user_id):
-    user = User.query.get_or_404(user_id)
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
 
-    return render_template('favorites.html', user=user, favorites=favorites)
-
-
-@app.route('/users/<user_id>/get_favorites', methods=['GET'])
-def get_user_favorites(user_id):
-    user = User.query.get_or_404(user_id)
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
-    all_favs = [fav.getTitles() for fav in favorites]
-    
-    
-    return jsonify(all_favs=all_favs)
 
 
 
@@ -236,7 +226,30 @@ def add_to_matches(user_id, match_id):
 # @app.route('/get_a_recipe/', methods=['GET', 'POST'])
 # def get_some_recipes(qry):
 #     print(res)
+@app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
+def view_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
 
+    for ind, fav in enumerate(favorites):
+        fav.order = ind
+        print(f'{fav.title} is number {ind}')
+
+    return render_template('favorites.html', user=user, favorites=favorites)
+
+
+
+
+@app.route('/users/<user_id>/get_favorites', methods=['GET'])
+def get_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    all_favs = [fav.getTitles() for fav in favorites]
+    
+    return jsonify(all_favs=all_favs)
+
+
+  
 @app.route('/recipe_details/<int:meal_id>', methods=['GET', 'POST'])
 def get_details(meal_id):
     res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={meal_id}')
@@ -277,13 +290,43 @@ def add_to_favorites(recipe_id):
                                 instructions=res_dict['strInstructions'],
                                 category=res_dict['strCategory'],
                                 area=res_dict['strArea'],
-                                original=res_dict['strSource'])
+                                original=res_dict['strSource'],
+                                is_top_3=False,
+                                order=0)
         db.session.add(new_favorite)
         
     flash('Successfully added recipe to favorites!')
     db.session.commit()
     
     return redirect('/')
+
+
+@app.route('/recipes/save_order', methods=['GET', 'POST'])
+def save_order():
+    user_id = g.user.id
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+
+
+    for ind, fav in enumerate(favorites):
+
+        new_favorite = Favorite(user_id=fav.user_id, 
+                        recipe_id = fav.recipe_id, 
+                        title=fav.title,
+                        ingredients=fav.ingredients,
+                        measurements=fav.measurements,
+                        instructions=fav.instructions,
+                        category=fav.category,
+                        area=fav.area,
+                        original=fav.original,
+                        is_top_3=False,
+                        order=ind)
+
+
+        db.session.commit()
+        print(f'{fav.title} is number {ind}')
+
+    flash('New favorites order saved')
+    return redirect(f'/users/{g.user.id}/favorites')
         
         
 #####################################   Message Routes   #############################################

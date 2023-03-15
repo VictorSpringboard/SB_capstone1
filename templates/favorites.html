@@ -31,8 +31,15 @@
 
         {% block body %}
     
+
+        
+        
+        
         <h1>{{user.username}}'s favorite recipes</h1>
         <p>Drag and drop</p>
+        <form action="/recipes/save_order">
+            <button>Save order</button>
+        </form>
         <ul class="draggable-list" id="draggable-list">
             {% for fav in favorites %}
             <li style="display:none">
@@ -43,9 +50,7 @@
     
     
 
-        
-        
-        
+
         
         
         
