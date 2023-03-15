@@ -231,10 +231,6 @@ def view_user_favorites(user_id):
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
-    for ind, fav in enumerate(favorites):
-        fav.order = ind
-        print(f'{fav.title} is number {ind}')
-
     return render_template('favorites.html', user=user, favorites=ordered_favorites)
 
 
@@ -304,14 +300,31 @@ def add_to_favorites(recipe_id):
 @app.route('/recipes/save_order', methods=['GET', 'POST'])
 def save_order():
     user_id = g.user.id
-    old_favorites = Favorite.query.filter_by(user_id=user_id).all()
-    def find_order(fav):
-        return fav.order
-    new_favorites = sorted(old_favorites, key=find_order)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+
+    sorted_favorites = sorted(favorites, key=lambda x: x.order)
     
-    old_titles = [fav.title for fav in old_favorites]
-    new_titles = [fav.title for fav in new_favorites]
+    favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(favorites)]
+    sorted_favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(sorted_favorites)]
     breakpoint()
+    
+    
+    # What needs to happen here:
+        # Routing
+            # From the nav bar, "My favorite recipes" takes you to a page that ONLY shows you the favs 
+            # sorted by their current order (the default order). That page has a button that says "change favorites order".
+            # That button takes you to another page where you drag/drop, then the save button on that page saves the sorting 
+            # for that list and updates each favorites order property.
+            
+            # (I think)
+    
+    
+    
+    
+    
+    
+    
+    
     # for ind, fav in enumerate(favorites):
 
     #     new_favorite = Favorite(user_id=fav.user_id, 
