@@ -11,8 +11,10 @@ from flask_bootstrap import Bootstrap
 import os
 
 '''
-march 4 commit notes:
-finally deployed to heroku. need to do some testing
+March 14 commit notes:
+
+On the page where you view all the favorites, the order was wrong. It was ordering the favorites list randomly. I changed it 
+so now the list is pulled in order using the order column as the sorting key. 
 '''
 
 
