@@ -113,3 +113,27 @@ const secondFav = document.querySelectorAll("[data-index='1']")
 const thirdFav = document.querySelectorAll("[data-index='2']")
 
 const faves = [firstFav, secondFav, thirdFav]
+
+function sendNewOrder(path, obj){
+  axios.post(path, obj).then(
+    (res) => {
+      let test = 'test'
+    }
+  ),
+  (error) => {
+    console.log
+  }
+}
+
+const testObj = {
+  'test': {
+    '1': firstFav,
+    '2': secondFav,
+    '3': thirdFav
+  }
+}
+
+
+
+const saveButt = document.getElementsByClassName('save-butt')
+saveButt.addEventListener('click', sendNewOrder('127.0.0.1:5000/recipes/save_order', testObj))

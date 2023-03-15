@@ -35,10 +35,10 @@
         
         
         
-        <h1>{{user.username}}'s favorite recipes</h1>
+        <h1>{{g.user.username}}'s favorite recipes</h1>
         <p>Drag and drop</p>
         <form action="/recipes/save_order">
-            <button>Save order</button>
+            <button class="save-butt">Save order</button>
         </form>
         <ul class="draggable-list" id="draggable-list">
             {% for fav in favorites %}

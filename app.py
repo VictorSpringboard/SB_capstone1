@@ -9,10 +9,13 @@ import requests, json, random
 from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
 import os
+from flask_cors import CORS
 
 '''
-march 4 commit notes:
-finally deployed to heroku. need to do some testing
+March 14 commit notes:
+
+On the page where you view all the favorites, the order was wrong. It was ordering the favorites list randomly. I changed it 
+so now the list is pulled in order using the order column as the sorting key. 
 '''
 
 
@@ -23,6 +26,7 @@ API_KEY = 9973533
 
 app = Flask(__name__)
 bootstrap = Bootstrap()
+CORS(app)
 # home db
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
@@ -166,9 +170,6 @@ def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
-    for ind, fav in enumerate(favorites):
-        fav.order = ind + 1
-        print(f'{fav.title} is number {fav.order}')
 
 
     return render_template('user_profile.html', 
@@ -230,15 +231,18 @@ def add_to_matches(user_id, match_id):
 def view_user_favorites(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
-
-    for ind, fav in enumerate(favorites):
-        fav.order = ind
-        print(f'{fav.title} is number {ind}')
-
-    return render_template('favorites.html', user=user, favorites=favorites)
+    ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
 
+    return render_template('show_favorites.html', user=user, favorites=ordered_favorites)
 
+@app.route('/users/<user_id>/edit_favorites', methods=['GET', 'POST'])
+def edit_favorites(user_id):
+    user_id = g.user.id
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    ordered_favorites = sorted(favorites, key=lambda x: x.order)
+
+    return render_template('edit_favorites_order.html', favorites=ordered_favorites)
 
 @app.route('/users/<user_id>/get_favorites', methods=['GET'])
 def get_user_favorites(user_id):
@@ -303,27 +307,53 @@ def add_to_favorites(recipe_id):
 
 @app.route('/recipes/save_order', methods=['GET', 'POST'])
 def save_order():
-    user_id = g.user.id
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
 
+    test = request.json(['test'])
+    breakpoint()
+    # user_id = g.user.id
+    # favorites = Favorite.query.filter_by(user_id=user_id).all()
 
-    for ind, fav in enumerate(favorites):
+    # sorted_favorites = sorted(favorites, key=lambda x: x.order)
+    
+    # favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(favorites)]
+    # sorted_favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(sorted_favorites)]
+    
+    # flash('top 3 saved!')
+    # return redirect(f'/users/{g.user.id}/favorites')
+    
+    # What needs to happen here:
+        # Routing
+            # From the nav bar, "My favorite recipes" takes you to a page that ONLY shows you the favs 
+            # sorted by their current order (the default order). That page has a button that says "change favorites order".
+            # That button takes you to another page where you drag/drop, then the save button on that page saves the sorting 
+            # for that list and updates each favorites order property.
+            
+            # (I think)
+    
+    
+    
+    
+    
+    
+    
+    
+    # for ind, fav in enumerate(favorites):
 
-        new_favorite = Favorite(user_id=fav.user_id, 
-                        recipe_id = fav.recipe_id, 
-                        title=fav.title,
-                        ingredients=fav.ingredients,
-                        measurements=fav.measurements,
-                        instructions=fav.instructions,
-                        category=fav.category,
-                        area=fav.area,
-                        original=fav.original,
-                        is_top_3=False,
-                        order=ind)
+    #     new_favorite = Favorite(user_id=fav.user_id, 
+    #                     recipe_id = fav.recipe_id, 
+    #                     title=fav.title,
+    #                     ingredients=fav.ingredients,
+    #                     measurements=fav.measurements,
+    #                     instructions=fav.instructions,
+    #                     category=fav.category,
+    #                     area=fav.area,
+    #                     original=fav.original,
+    #                     is_top_3=False,
+    #                     order=ind)
 
-
-        db.session.commit()
-        print(f'{fav.title} is number {ind}')
+    #     db.session.add(new_favorite)
+    #     db.session.commit()
+    #     print(f'{fav.title} is number {ind}')
 
     flash('New favorites order saved')
     return redirect(f'/users/{g.user.id}/favorites')
