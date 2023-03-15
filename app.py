@@ -24,10 +24,10 @@ API_KEY = 9973533
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -166,9 +166,6 @@ def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
-    for ind, fav in enumerate(favorites):
-        fav.order = ind + 1
-        print(f'{fav.title} is number {fav.order}')
 
 
     return render_template('user_profile.html', 
@@ -230,12 +227,13 @@ def add_to_matches(user_id, match_id):
 def view_user_favorites(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
+    ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
     for ind, fav in enumerate(favorites):
         fav.order = ind
         print(f'{fav.title} is number {ind}')
 
-    return render_template('favorites.html', user=user, favorites=favorites)
+    return render_template('favorites.html', user=user, favorites=ordered_favorites)
 
 
 
@@ -304,26 +302,31 @@ def add_to_favorites(recipe_id):
 @app.route('/recipes/save_order', methods=['GET', 'POST'])
 def save_order():
     user_id = g.user.id
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    old_favorites = Favorite.query.filter_by(user_id=user_id).all()
+    def find_order(fav):
+        return fav.order
+    new_favorites = sorted(old_favorites, key=find_order)
+    
+    old_titles = [fav.title for fav in old_favorites]
+    new_titles = [fav.title for fav in new_favorites]
+    breakpoint()
+    # for ind, fav in enumerate(favorites):
 
+    #     new_favorite = Favorite(user_id=fav.user_id, 
+    #                     recipe_id = fav.recipe_id, 
+    #                     title=fav.title,
+    #                     ingredients=fav.ingredients,
+    #                     measurements=fav.measurements,
+    #                     instructions=fav.instructions,
+    #                     category=fav.category,
+    #                     area=fav.area,
+    #                     original=fav.original,
+    #                     is_top_3=False,
+    #                     order=ind)
 
-    for ind, fav in enumerate(favorites):
-
-        new_favorite = Favorite(user_id=fav.user_id, 
-                        recipe_id = fav.recipe_id, 
-                        title=fav.title,
-                        ingredients=fav.ingredients,
-                        measurements=fav.measurements,
-                        instructions=fav.instructions,
-                        category=fav.category,
-                        area=fav.area,
-                        original=fav.original,
-                        is_top_3=False,
-                        order=ind)
-
-
-        db.session.commit()
-        print(f'{fav.title} is number {ind}')
+    #     db.session.add(new_favorite)
+    #     db.session.commit()
+    #     print(f'{fav.title} is number {ind}')
 
     flash('New favorites order saved')
     return redirect(f'/users/{g.user.id}/favorites')
