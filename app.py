@@ -14,8 +14,9 @@ from flask_cors import CORS
 '''
 March 14 commit notes:
 
-On the page where you view all the favorites, the order was wrong. It was ordering the favorites list randomly. I changed it 
-so now the list is pulled in order using the order column as the sorting key. 
+Current Plan:
+
+Abandon the drag/drop JS solution. Trying to find a simpler solution.
 '''
 
 
