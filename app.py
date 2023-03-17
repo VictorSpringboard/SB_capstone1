@@ -253,6 +253,18 @@ def edit_individual_fav(user_id, fav_id):
 
     fav = Favorite.query.filter_by(recipe_id=fav_id, user_id=user_id).all()
     form = FavoriteChoiceForm()
+    if form.validate_on_submit():
+        fav[0].is_top_3 = form.fav_choice.data
+        if form.delete.data:
+            db.session.delete(fav[0])
+            db.session.commit()
+        else:
+            db.session.add(fav[0])
+            db.session.commit()
+        return redirect(f'/users/{user_id}/favorites')
+        
+
+
     return render_template('edit_fav.html', fav=fav, form=form)
 
 @app.route('/users/<user_id>/get_favorites', methods=['GET'])
