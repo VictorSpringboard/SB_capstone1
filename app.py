@@ -11,11 +11,12 @@ from flask_bootstrap import Bootstrap
 import os
 
 '''
-March 14 commit notes:
+March 16 commit notes:
 
 Current Plan:
 
-Abandon the drag/drop JS solution. Trying to find a simpler solution.
+Abandon JS solutions. Try an 'edit individual favorite' page. You can choose whether its a top or not, then choose to delete it
+if you want. Just 2 options, top 3 and delete. 
 '''
 
 
