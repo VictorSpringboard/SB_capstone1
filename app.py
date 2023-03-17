@@ -261,6 +261,7 @@ def edit_individual_fav(user_id, fav_id):
         else:
             db.session.add(fav[0])
             db.session.commit()
+        breakpoint()
         return redirect(f'/users/{user_id}/favorites')
         
 
