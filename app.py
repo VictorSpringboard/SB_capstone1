@@ -3,7 +3,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import LoginForm, RegisterUserForm, MessageForm, EditProfileForm, FavoriteChoice
+from forms import LoginForm, RegisterUserForm, MessageForm, EditProfileForm, FavoriteChoiceForm
 from models import db, connect_db, User, Favorite, Match, Message
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
@@ -28,10 +28,10 @@ API_KEY = 9973533
 app = Flask(__name__)
 bootstrap = Bootstrap()
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -242,10 +242,18 @@ def edit_favorites(user_id):
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
-    choice = FavoriteChoice()
+    form = FavoriteChoiceForm()
 
 
-    return render_template('edit_favorites_order.html', favorites=ordered_favorites, choice=choice)
+    return render_template('edit_favorites_order.html', favorites=ordered_favorites, form=form)
+
+
+@app.route('/users/<int:user_id>/favs/<int:fav_id>/edit_fav', methods=['GET', 'POST'])
+def edit_individual_fav(user_id, fav_id):
+
+    fav = Favorite.query.filter_by(recipe_id=fav_id, user_id=user_id).all()
+    form = FavoriteChoiceForm()
+    return render_template('edit_fav.html', fav=fav, form=form)
 
 @app.route('/users/<user_id>/get_favorites', methods=['GET'])
 def get_user_favorites(user_id):

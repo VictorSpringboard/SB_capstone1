@@ -36,7 +36,9 @@ class EditProfileForm(FlaskForm):
     password = PasswordField('Confirm password')
     submit = SubmitField('Save changes')
     
-class FavoriteChoice(FlaskForm):
+class FavoriteChoiceForm(FlaskForm):
     
-    fav_choice = BooleanField()
+    fav_choice = BooleanField('Add to top 3 favorites?')
+    delete = BooleanField('Delete?')
+    sumit = SubmitField('Save changes')
     
