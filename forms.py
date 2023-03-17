@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm 
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField, BooleanField 
 from wtforms_alchemy import model_form_factory
 from models import db, User
 from wtforms.validators import InputRequired
@@ -35,3 +35,8 @@ class EditProfileForm(FlaskForm):
     img = StringField('Image URL')
     password = PasswordField('Confirm password')
     submit = SubmitField('Save changes')
+    
+class FavoriteChoice(FlaskForm):
+    
+    fav_choice = BooleanField()
+    
