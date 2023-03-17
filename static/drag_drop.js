@@ -1,9 +1,3 @@
-
-
-
-
-
-
 const draggable_list = document.getElementById('draggable-list');
 const recipes = draggable_list.getElementsByTagName('li')
 const recipe_titles = []
@@ -15,7 +9,7 @@ for (let recipe of recipes){
 
 const richestPeople = [...recipe_titles]
 
-// Store listitems
+// Store list items
 const listItems = [];
 
 let dragStartIndex;
@@ -96,19 +90,7 @@ function swapItems(fromIndex, toIndex) {
   listItems[toIndex].appendChild(itemOne);
 }
 
-// Check the order of list items
-function checkOrder() {
-  listItems.forEach((listItem, index) => {
-    const personName = listItem.querySelector('.draggable').innerText.trim();
 
-    if (personName !== richestPeople[index]) {
-      listItem.classList.add('wrong');
-    } else {
-      listItem.classList.remove('wrong');
-      listItem.classList.add('right');
-    }
-  });
-}
 
 function addEventListeners() {
   const draggables = document.querySelectorAll('.draggable');
@@ -126,4 +108,32 @@ function addEventListeners() {
   });
 }
 
-check.addEventListener('click', checkOrder);
+const firstFav = document.querySelectorAll("[data-index='0']")
+const secondFav = document.querySelectorAll("[data-index='1']")
+const thirdFav = document.querySelectorAll("[data-index='2']")
+
+const faves = [firstFav, secondFav, thirdFav]
+
+function sendNewOrder(path, obj){
+  axios.post(path, obj).then(
+    (res) => {
+      let test = 'test'
+    }
+  ),
+  (error) => {
+    console.log
+  }
+}
+
+const testObj = {
+  'test': {
+    '1': firstFav,
+    '2': secondFav,
+    '3': thirdFav
+  }
+}
+
+
+
+const saveButt = document.getElementsByClassName('save-butt')
+saveButt.addEventListener('click', sendNewOrder('127.0.0.1:5000/recipes/save_order', testObj))

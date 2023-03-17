@@ -15,7 +15,7 @@
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="/static/drag_drop.css">
+    <link rel="stylesheet" href="/static/styles.css">
 
     {% block title %}
     <title>Title of the Document!</title>
@@ -27,21 +27,10 @@
         {% for msg in get_flashed_messages() %}
         <div class="alert alert-success">{{ msg }}</div>
         {% endfor %}
+        {% block body %}
         
 
-        {% block body %}
-    
-        <h1>{{user.username}}'s favorite recipes</h1>
-        <p>Drag and drop</p>
-        <ul class="draggable-list" id="draggable-list">
-            {% for fav in favorites %}
-            <li style="display:none">
-               {{fav.title}}
-           </li>
-       {% endfor %}
-    </ul>
-    
-    
+
 
         
         
@@ -72,26 +61,6 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" 
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
         crossorigin="anonymous"></script>
-        <script src="/static/drag_drop.js"></script>
+        <script src="/static/reordering.js"></script>
     </body>
     </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -9,10 +9,14 @@ import requests, json, random
 from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
 import os
+from flask_cors import CORS
 
 '''
-march 4 commit notes:
-finally deployed to heroku. need to do some testing
+March 14 commit notes:
+
+Current Plan:
+
+Abandon the drag/drop JS solution. Trying to find a simpler solution.
 '''
 
 
@@ -23,11 +27,12 @@ API_KEY = 9973533
 
 app = Flask(__name__)
 bootstrap = Bootstrap()
+CORS(app)
 # home db
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -166,6 +171,8 @@ def view_user_profile(user_id):
     user = User.query.get_or_404(user_id)
     favorites = Favorite.query.filter_by(user_id=user_id).all()
 
+
+
     return render_template('user_profile.html', 
                                 user=user, 
                                 favorites=favorites)
@@ -173,22 +180,7 @@ def view_user_profile(user_id):
 
 
 
-@app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
-def view_user_favorites(user_id):
-    user = User.query.get_or_404(user_id)
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
 
-    return render_template('favorites.html', user=user, favorites=favorites)
-
-
-@app.route('/users/<user_id>/get_favorites', methods=['GET'])
-def get_user_favorites(user_id):
-    user = User.query.get_or_404(user_id)
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
-    all_favs = [fav.getTitles() for fav in favorites]
-    
-    
-    return jsonify(all_favs=all_favs)
 
 
 
@@ -236,7 +228,33 @@ def add_to_matches(user_id, match_id):
 # @app.route('/get_a_recipe/', methods=['GET', 'POST'])
 # def get_some_recipes(qry):
 #     print(res)
+@app.route('/users/<user_id>/favorites', methods=['GET', 'POST'])
+def view_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
+
+    return render_template('show_favorites.html', user=user, favorites=ordered_favorites)
+
+@app.route('/users/<user_id>/edit_favorites', methods=['GET', 'POST'])
+def edit_favorites(user_id):
+    user_id = g.user.id
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    ordered_favorites = sorted(favorites, key=lambda x: x.order)
+
+    return render_template('edit_favorites_order.html', favorites=ordered_favorites)
+
+@app.route('/users/<user_id>/get_favorites', methods=['GET'])
+def get_user_favorites(user_id):
+    user = User.query.get_or_404(user_id)
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    all_favs = [fav.getTitles() for fav in favorites]
+    
+    return jsonify(all_favs=all_favs)
+
+
+  
 @app.route('/recipe_details/<int:meal_id>', methods=['GET', 'POST'])
 def get_details(meal_id):
     res = requests.get(f'https://www.themealdb.com/api/json/v2/{API_KEY}/lookup.php?i={meal_id}')
@@ -277,13 +295,69 @@ def add_to_favorites(recipe_id):
                                 instructions=res_dict['strInstructions'],
                                 category=res_dict['strCategory'],
                                 area=res_dict['strArea'],
-                                original=res_dict['strSource'])
+                                original=res_dict['strSource'],
+                                is_top_3=False,
+                                order=0)
         db.session.add(new_favorite)
         
     flash('Successfully added recipe to favorites!')
     db.session.commit()
     
     return redirect('/')
+
+
+@app.route('/recipes/save_order', methods=['GET', 'POST'])
+def save_order():
+
+    test = request.json(['test'])
+    breakpoint()
+    # user_id = g.user.id
+    # favorites = Favorite.query.filter_by(user_id=user_id).all()
+
+    # sorted_favorites = sorted(favorites, key=lambda x: x.order)
+    
+    # favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(favorites)]
+    # sorted_favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(sorted_favorites)]
+    
+    # flash('top 3 saved!')
+    # return redirect(f'/users/{g.user.id}/favorites')
+    
+    # What needs to happen here:
+        # Routing
+            # From the nav bar, "My favorite recipes" takes you to a page that ONLY shows you the favs 
+            # sorted by their current order (the default order). That page has a button that says "change favorites order".
+            # That button takes you to another page where you drag/drop, then the save button on that page saves the sorting 
+            # for that list and updates each favorites order property.
+            
+            # (I think)
+    
+    
+    
+    
+    
+    
+    
+    
+    # for ind, fav in enumerate(favorites):
+
+    #     new_favorite = Favorite(user_id=fav.user_id, 
+    #                     recipe_id = fav.recipe_id, 
+    #                     title=fav.title,
+    #                     ingredients=fav.ingredients,
+    #                     measurements=fav.measurements,
+    #                     instructions=fav.instructions,
+    #                     category=fav.category,
+    #                     area=fav.area,
+    #                     original=fav.original,
+    #                     is_top_3=False,
+    #                     order=ind)
+
+    #     db.session.add(new_favorite)
+    #     db.session.commit()
+    #     print(f'{fav.title} is number {ind}')
+
+    flash('New favorites order saved')
+    return redirect(f'/users/{g.user.id}/favorites')
         
         
 #####################################   Message Routes   #############################################
