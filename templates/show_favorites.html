@@ -42,9 +42,16 @@
         </form>
         <ul class="draggable-list" id="draggable-list">
             {% for fav in favorites %}
-            <li>
+                {% if fav.is_top_3 == 'TRUE' or fav.is_top_3 == 'true' %}
+                    <h2>
+                        {{fav.title}}
+                    </h2>
+                {% else %}
+                    <p>{{fav.title}}</p>
+                {% endif %}
+            <!-- <li>
                {{fav.title}}
-           </li>
+           </li> -->
        {% endfor %}
     </ul>
     
