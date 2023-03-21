@@ -50,7 +50,7 @@ for i in range(len(faves_df)):
                                  category=faves_df[i]['category'],
                                  area=faves_df[i]['area'],
                                  original=faves_df[i]['original'],
-                                 is_top_3=random.choice(['True', 'False']),
+                                 is_top_3=faves_df[i]['is_top_3']),
                                  order=faves_df[i]['order']
                                  )
     db.session.add(new)
