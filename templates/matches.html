@@ -15,7 +15,7 @@
           <p class="card-text">{{rando_user.bio}}</p>
           <h3>My favorite foods</h3>
           <ol>
-            {% for item in rando_user_favs %}
+            {% for item in rando_user_favs if item.is_top_3 == 'TRUE' or item.is_top_3 =='true' %}
                 <li><a href="/recipe_details/{{item.recipe_id}}">{{item.title}}</a></li>
             {% endfor %}
           </ol>
