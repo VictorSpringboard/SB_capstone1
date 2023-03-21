@@ -21,7 +21,7 @@ app.app_context().push()
 def drop_create():
     db.drop_all()
     db.create_all()
-# drop_create()
+drop_create()
 
 
 df = read_csv('./dummy_data/usersDB_3-20.csv')
