@@ -1,3 +1,4 @@
+id,username,password,email,bio,img
 1,dcutbush0,$2b$12$dl3nfSC3cLRaX6yCWh6vbuv..c/XhtQAeM0YUuKeKHPVW4JG4Jhkq,cdenver0@psu.edu,Fully-configurable multi-state internet solution,https://randomuser.me/api/portraits/men/4.jpg
 2,rtroak1,$2b$12$kcX7103ctvtcxKPVCbFTCOKLPteDTMqnsFQXKQbttk7fXg8e8BFrO,enellen1@free.fr,Quality-focused directional flexibility,https://randomuser.me/api/portraits/women/78.jpg
 3,jlebrom2,$2b$12$I4ssOogFMGWK5ul.MDlGleqOylqP5zALZnYX1KPTE0mjuQqnUZ2Rq,jfladgate2@zdnet.com,Business-focused demand-driven knowledge user,https://randomuser.me/api/portraits/women/25.jpg
@@ -153,4 +154,4 @@
 154,BoomHauer,$2b$12$51R.cOmkwCcvJLynw2h5fOxl.g0QNlp6dxZYPZAbkPL4eMoyUnzmO,dang@dang.com,"Dang ole, tawmbout..biography.",https://upload.wikimedia.org/wikipedia/en/b/be/Jeff_Boomhauer.png
 155,aaa,$2b$12$buM45uTmTA9h2EIP5CcniOlp8t.GOXuLuTmbCRMZZCCGyppWnY3s2,aaa,aaa,aaa
 153,BobbyHill,$2b$12$vuRPYBUcZNtfMQLsblVxseA7zxweDA9/Ro5SlTbBi3YJm6PkCHIIa,fartfartfartfartfart@fart.com,I am an amateur comedian,https://imgix.ranker.com/list_img_v2/14514/2754514/original/bobby-hill-feminist-hero
-156,bro,$2b$12$QZ6GfXNA11eGYbmD.hExFOSlgqRdjlwsItojJX89DeZKA0IZM50lS,bro@bro.com,bro,""
+156,bro,$2b$12$QZ6GfXNA11eGYbmD.hExFOSlgqRdjlwsItojJX89DeZKA0IZM50lS,bro@bro.com,bro,
