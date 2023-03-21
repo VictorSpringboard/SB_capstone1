@@ -3,11 +3,14 @@
 {% block body %}
     
     <h1>Current Top 3</h1>
-    
-
-
-
-
+    {% for fav in favorites %}
+            {% if fav.is_top_3 %}
+            <div class="top-3"><a href="/users/{{g.user.id}}/favs/{{fav.recipe_id}}/edit_fav">{{fav.title}}</a></div>
+            
+            {% elif fav.is_top_3 != 'TRUE' %}
+            <div class="fav-holder"><a href="/users/{{g.user.id}}/favs/{{fav.recipe_id}}/edit_fav">{{fav.title}}</a></div>
+            {% endif %}
+    {% endfor %}
 
 
 {% endblock %}

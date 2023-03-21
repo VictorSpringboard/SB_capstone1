@@ -3,20 +3,20 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime as dt
-from forms import LoginForm, RegisterUserForm, MessageForm, EditProfileForm
+from forms import LoginForm, RegisterUserForm, MessageForm, EditProfileForm, FavoriteChoiceForm
 from models import db, connect_db, User, Favorite, Match, Message
 import requests, json, random
 from sqlalchemy.exc import IntegrityError
 from flask_bootstrap import Bootstrap
 import os
-from flask_cors import CORS
 
 '''
-March 14 commit notes:
+March 16 commit notes:
 
 Current Plan:
 
-Abandon the drag/drop JS solution. Trying to find a simpler solution.
+Abandon JS solutions. Try an 'edit individual favorite' page. You can choose whether its a top or not, then choose to delete it
+if you want. Just 2 options, top 3 and delete. 
 '''
 
 
@@ -27,12 +27,11 @@ API_KEY = 9973533
 
 app = Flask(__name__)
 bootstrap = Bootstrap()
-CORS(app)
 # home db
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql://postgres:admin@localhost/yumble')
 
 # work db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///yumble.db'
 
 # test db
 app.config['SQLALCHEMY_BINDS'] = {'testDB': 'sqlite:///test_yumble.db'}
@@ -243,7 +242,30 @@ def edit_favorites(user_id):
     favorites = Favorite.query.filter_by(user_id=user_id).all()
     ordered_favorites = sorted(favorites, key=lambda x: x.order)
 
-    return render_template('edit_favorites_order.html', favorites=ordered_favorites)
+    form = FavoriteChoiceForm()
+
+
+    return render_template('edit_favorites_order.html', favorites=ordered_favorites, form=form)
+
+
+@app.route('/users/<int:user_id>/favs/<int:fav_id>/edit_fav', methods=['GET', 'POST'])
+def edit_individual_fav(user_id, fav_id):
+
+    fav = Favorite.query.filter_by(recipe_id=fav_id, user_id=user_id).all()
+    form = FavoriteChoiceForm()
+    if form.validate_on_submit():
+        fav[0].is_top_3 = form.fav_choice.data
+        if form.delete.data:
+            db.session.delete(fav[0])
+            db.session.commit()
+        else:
+            db.session.add(fav[0])
+            db.session.commit()
+        return redirect(f'/users/{user_id}/favorites')
+        
+
+
+    return render_template('edit_fav.html', fav=fav, form=form)
 
 @app.route('/users/<user_id>/get_favorites', methods=['GET'])
 def get_user_favorites(user_id):
@@ -297,6 +319,8 @@ def add_to_favorites(recipe_id):
                                 area=res_dict['strArea'],
                                 original=res_dict['strSource'],
                                 is_top_3=False,
+                                # NEED TO FIX THIS. Order isn't 0 anymore, I seeded the db with the actual orders.
+                                # this is going to make a weird bug I bet. 
                                 order=0)
         db.session.add(new_favorite)
         
@@ -306,59 +330,10 @@ def add_to_favorites(recipe_id):
     return redirect('/')
 
 
-@app.route('/recipes/save_order', methods=['GET', 'POST'])
-def save_order():
 
-    test = request.json(['test'])
-    breakpoint()
-    # user_id = g.user.id
-    # favorites = Favorite.query.filter_by(user_id=user_id).all()
+    
+    
 
-    # sorted_favorites = sorted(favorites, key=lambda x: x.order)
-    
-    # favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(favorites)]
-    # sorted_favorites_and_inds = [(ind + 1, fav.title) for ind, fav in enumerate(sorted_favorites)]
-    
-    # flash('top 3 saved!')
-    # return redirect(f'/users/{g.user.id}/favorites')
-    
-    # What needs to happen here:
-        # Routing
-            # From the nav bar, "My favorite recipes" takes you to a page that ONLY shows you the favs 
-            # sorted by their current order (the default order). That page has a button that says "change favorites order".
-            # That button takes you to another page where you drag/drop, then the save button on that page saves the sorting 
-            # for that list and updates each favorites order property.
-            
-            # (I think)
-    
-    
-    
-    
-    
-    
-    
-    
-    # for ind, fav in enumerate(favorites):
-
-    #     new_favorite = Favorite(user_id=fav.user_id, 
-    #                     recipe_id = fav.recipe_id, 
-    #                     title=fav.title,
-    #                     ingredients=fav.ingredients,
-    #                     measurements=fav.measurements,
-    #                     instructions=fav.instructions,
-    #                     category=fav.category,
-    #                     area=fav.area,
-    #                     original=fav.original,
-    #                     is_top_3=False,
-    #                     order=ind)
-
-    #     db.session.add(new_favorite)
-    #     db.session.commit()
-    #     print(f'{fav.title} is number {ind}')
-
-    flash('New favorites order saved')
-    return redirect(f'/users/{g.user.id}/favorites')
-        
         
 #####################################   Message Routes   #############################################
 @app.route('/users/<int:user_id>/messages')
